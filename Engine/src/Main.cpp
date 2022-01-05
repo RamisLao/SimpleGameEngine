@@ -1,0 +1,16 @@
+#include "Game\Game.h"
+
+int main(int argc, char** argv)
+{
+	Engine::Game game;
+	bool success = game.Initialize();
+
+	if (success)
+	{
+		game.RunLoop();
+	}
+
+	game.Shutdown();
+	return 0;
+
+}
