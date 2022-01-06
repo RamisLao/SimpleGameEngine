@@ -1,4 +1,13 @@
 #include "Game.h"
+#include <iostream>
+
+std::ostream& operator<<(std::ostream& stream, const Engine::Ball& ball)
+{
+	stream << "Pos (" << ball.position.x << ", " << ball.position.y << ")";
+	stream << " - Vel(" << ball.velocity.x << ", " << ball.velocity.y << ")";
+
+	return stream;
+}
 
 namespace Engine
 {
@@ -10,8 +19,13 @@ namespace Engine
 		m_Renderer(nullptr),
 		m_IsRunning(true),
 		m_TicksCount(0),
-		m_PaddleDir(0)
+		m_LeftPaddleDir(0)
 	{
+		for (int i = 0; i < 2; i++)
+		{
+			Ball ball;
+			m_Balls.push_back(ball);
+		}
 	}
 
 	bool Game::Initialize()
@@ -45,12 +59,19 @@ namespace Engine
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
 		);
 
-		m_BallPos.x = 1024 / 2;
-		m_BallPos.y = 768 / 2;
-		m_LeftPaddlePos.x = thickness/2 + 10.0f;
+		for (Ball& ball : m_Balls)
+		{
+			ball.position.x = 1024 / 2;
+			ball.position.y = 768 / 2;
+
+			ball.velocity.x = -100 + rand() % ((300 + 1) + 100);
+			ball.velocity.y = -100 + rand() % ((300 + 1) + 100);
+		}
+
+		m_LeftPaddlePos.x = thickness / 2 + 10.0f;
 		m_LeftPaddlePos.y = 768 / 2;
-		m_BallVel.x = -200.0f;
-		m_BallVel.y = 235.0f;
+		m_RightPaddlePos.x = 1024 - thickness / 2 - 10.0f;
+		m_RightPaddlePos.y = 768 / 2;
 
 		return true;
 	}
@@ -82,14 +103,24 @@ namespace Engine
 			m_IsRunning = false;
 		}
 
-		m_PaddleDir = 0;
+		m_LeftPaddleDir = 0;
 		if (state[SDL_SCANCODE_W])
 		{
-			m_PaddleDir -= 1;
+			m_LeftPaddleDir -= 1;
 		}
 		if (state[SDL_SCANCODE_S])
 		{
-			m_PaddleDir += 1;
+			m_LeftPaddleDir += 1;
+		}
+
+		m_RightPaddleDir = 0;
+		if (state[SDL_SCANCODE_I])
+		{
+			m_RightPaddleDir -= 1;
+		}
+		if (state[SDL_SCANCODE_K])
+		{
+			m_RightPaddleDir += 1;
 		}
 	}
 
@@ -105,9 +136,9 @@ namespace Engine
 			deltaTime = 0.05f;
 		}
 
-		if (m_PaddleDir != 0)
+		if (m_LeftPaddleDir != 0)
 		{
-			m_LeftPaddlePos.y += m_PaddleDir * 300.0f * deltaTime;
+			m_LeftPaddlePos.y += m_LeftPaddleDir * 300.0f * deltaTime;
 
 			if (m_LeftPaddlePos.y < (paddleH / 2.0f + thickness))
 			{
@@ -119,34 +150,59 @@ namespace Engine
 			}
 		}
 
-		m_BallPos.x += m_BallVel.x * deltaTime;
-		m_BallPos.y += m_BallVel.y * deltaTime;
-
-		// Check collision to top and bottom walls
-		if ((m_BallPos.y <= thickness && m_BallVel.y < 0.0f) ||
-			(m_BallPos.y >= 768.0f - thickness && m_BallVel.y > 0.0f))
+		if (m_RightPaddleDir != 0)
 		{
-			m_BallVel.y *= -1;
+			m_RightPaddlePos.y += m_RightPaddleDir * 300.0f * deltaTime;
+
+			if (m_RightPaddlePos.y < (paddleH / 2.0f + thickness))
+			{
+				m_RightPaddlePos.y = paddleH / 2.0f + thickness;
+			}
+			else if (m_RightPaddlePos.y > 768.0f - paddleH / 2.0f - thickness)
+			{
+				m_RightPaddlePos.y = 768.0f - paddleH / 2.0f - thickness;
+			}
 		}
 
-		float diff = m_LeftPaddlePos.y - m_BallPos.y;
-		diff = (diff > 0.0f) ? diff : -diff;
+		for (Ball& ball : m_Balls)
+		{
+			ball.position.x += ball.velocity.x * deltaTime;
+			ball.position.y += ball.velocity.y * deltaTime;
 
-		if (
-		// Check collision with paddle
-			(diff <= paddleH / 2.0f &&
-			m_BallPos.x <= m_LeftPaddlePos.x + thickness / 2 &&
-			m_BallPos.x >= m_LeftPaddlePos.x - thickness / 2 &&
-			m_BallVel.x < 0.0f) ||
-		// Check collision with right wall
-			((m_BallPos.x >= (1024 - thickness) && m_BallPos.x > 0.0f))
-			)
-		{
-			m_BallVel.x *= -1.0f;
-		}
-		else if (m_BallPos.x <= 0.0f)
-		{
-			m_IsRunning = false;
+			// Check collision to top and bottom walls
+			if ((ball.position.y <= thickness && ball.velocity.y < 0.0f) ||
+				(ball.position.y >= 768.0f - thickness && ball.velocity.y > 0.0f))
+			{
+				ball.velocity.y *= -1;
+			}
+
+			float leftdiff = m_LeftPaddlePos.y - ball.position.y;
+			leftdiff = (leftdiff > 0.0f) ? leftdiff : -leftdiff;
+
+			float rightdiff = m_RightPaddlePos.y - ball.position.y;
+			rightdiff = (rightdiff > 0.0f) ? rightdiff : -rightdiff;
+
+			if (
+				// Check collision with Left paddle
+				(leftdiff <= paddleH / 2.0f &&
+					ball.position.x <= m_LeftPaddlePos.x + thickness / 2 &&
+					ball.position.x >= m_LeftPaddlePos.x - thickness / 2 &&
+					ball.velocity.x < 0.0f) ||
+				// Check collision with Right paddle
+				(rightdiff <= paddleH / 2.0f &&
+					ball.position.x >= m_RightPaddlePos.x - thickness / 2 &&
+					ball.position.x <= m_RightPaddlePos.x + thickness / 2 &&
+					ball.velocity.x > 0.0f) ||
+				// Check collision with right wall
+				(ball.position.x >= (1024 - thickness) && ball.position.x > 0.0f)
+				)
+			{
+				ball.velocity.x *= -1.0f;
+			}
+			else if (ball.position.x <= 0.0f || ball.position.x >= 1024.0f)
+			{
+				m_IsRunning = false;
+			}
 		}
 	}
 
@@ -183,20 +239,20 @@ namespace Engine
 		wall.y = 768 - thickness;
 		SDL_RenderFillRect(m_Renderer, &wall);
 
-		// Draw right wall
-		wall.x = 1024 - thickness;
-		wall.y = 0;
-		wall.w = thickness;
-		wall.h = 768;
-		SDL_RenderFillRect(m_Renderer, &wall);
-
-		SDL_Rect ball{
-			static_cast<int>(m_BallPos.x - thickness/2),
-			static_cast<int>(m_BallPos.y - thickness/2),
-			thickness,
-			thickness
+		SDL_Rect ballRect{
+				0,
+				0,
+				thickness,
+				thickness
 		};
-		SDL_RenderFillRect(m_Renderer, &ball);
+
+		for (Ball& ball : m_Balls)
+		{
+			ballRect.x = static_cast<int>(ball.position.x - thickness / 2);
+			ballRect.y = static_cast<int>(ball.position.y - thickness / 2);
+
+			SDL_RenderFillRect(m_Renderer, &ballRect);
+		}
 
 		SDL_Rect leftPaddle{
 			static_cast<int>(m_LeftPaddlePos.x - thickness / 2),
@@ -205,6 +261,14 @@ namespace Engine
 			static_cast<int>(paddleH)
 		};
 		SDL_RenderFillRect(m_Renderer, &leftPaddle);
+
+		SDL_Rect rightPaddle{
+			static_cast<int>(m_RightPaddlePos.x - thickness / 2),
+			static_cast<int>(m_RightPaddlePos.y - paddleH / 2),
+			thickness,
+			static_cast<int>(paddleH)
+		};
+		SDL_RenderFillRect(m_Renderer, &rightPaddle);
 
 		SDL_RenderPresent(m_Renderer);
 	}

@@ -1,6 +1,9 @@
 #pragma once
 
 #include <SDL.h>
+#include <vector>
+#include <ostream>
+
 
 namespace Engine
 {
@@ -8,6 +11,12 @@ namespace Engine
 	{
 		float x;
 		float y;
+	};
+
+	struct Ball
+	{
+		Vector2 position;
+		Vector2 velocity;
 	};
 
 	class Game
@@ -29,8 +38,10 @@ namespace Engine
 		SDL_Renderer* m_Renderer;
 
 		Vector2 m_LeftPaddlePos;
-		int m_PaddleDir;
-		Vector2 m_BallPos;
-		Vector2 m_BallVel;
+		int m_LeftPaddleDir;
+		Vector2 m_RightPaddlePos;
+		int m_RightPaddleDir;
+
+		std::vector<Ball> m_Balls;
 	};
 }
