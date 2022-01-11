@@ -192,9 +192,7 @@ namespace Engine
 				(rightdiff <= paddleH / 2.0f &&
 					ball.position.x >= m_RightPaddlePos.x - thickness / 2 &&
 					ball.position.x <= m_RightPaddlePos.x + thickness / 2 &&
-					ball.velocity.x > 0.0f) ||
-				// Check collision with right wall
-				(ball.position.x >= (1024 - thickness) && ball.position.x > 0.0f)
+					ball.velocity.x > 0.0f)
 				)
 			{
 				ball.velocity.x *= -1.0f;
