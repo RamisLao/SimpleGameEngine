@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <vector>
 #include <ostream>
+#include "Actor.h"
 
 
 namespace Engine
@@ -26,6 +27,9 @@ namespace Engine
 		bool Initialize();
 		void RunLoop();
 		void Shutdown();
+		
+		void AddActor(Actor* actor);
+		void RemoveActor(Actor* actor);
 	private:
 		void ProcessInput();
 		void UpdateGame();
@@ -37,11 +41,10 @@ namespace Engine
 		SDL_Window* m_Window;
 		SDL_Renderer* m_Renderer;
 
-		Vector2 m_LeftPaddlePos;
-		int m_LeftPaddleDir;
-		Vector2 m_RightPaddlePos;
-		int m_RightPaddleDir;
+		std::vector<Actor*> m_Actors;
+		std::vector<Actor*> m_PendingActors;
 
-		std::vector<Ball> m_Balls;
+		// Track if we're updating actors right now
+		bool m_UpdatingActors;
 	};
 }
