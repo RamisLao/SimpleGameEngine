@@ -21,8 +21,8 @@ const Vector3 Vector3::UnitZ(0.0f, 0.0f, 1.0f);
 const Vector3 Vector3::NegUnitX(-1.0f, 0.0f, 0.0f);
 const Vector3 Vector3::NegUnitY(0.0f, -1.0f, 0.0f);
 const Vector3 Vector3::NegUnitZ(0.0f, 0.0f, -1.0f);
-const Vector3 Vector3::Infinity(Math::Infinity, Math::Infinity, Math::Infinity);
-const Vector3 Vector3::NegInfinity(Math::NegInfinity, Math::NegInfinity, Math::NegInfinity);
+const Vector3 Vector3::Infinity(CustomMath::Infinity, CustomMath::Infinity, CustomMath::Infinity);
+const Vector3 Vector3::NegInfinity(CustomMath::NegInfinity, CustomMath::NegInfinity, CustomMath::NegInfinity);
 
 static float m3Ident[3][3] =
 {
@@ -78,7 +78,7 @@ Vector3 Vector3::TransformWithPerspDiv(const Vector3& vec, const Matrix4& mat, f
 		vec.z * mat.mat[2][2] + w * mat.mat[3][2];
 	float transformedW = vec.x * mat.mat[0][3] + vec.y * mat.mat[1][3] +
 		vec.z * mat.mat[2][3] + w * mat.mat[3][3];
-	if (!Math::NearZero(Math::Abs(transformedW)))
+	if (!CustomMath::NearZero(CustomMath::Abs(transformedW)))
 	{
 		transformedW = 1.0f / transformedW;
 		retVal *= transformedW;

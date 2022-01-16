@@ -1,5 +1,11 @@
 #include "Game.h"
 #include <iostream>
+#include "Actor.h"
+// https://www.libsdl.org/projects/SDL_image/
+#include "SDL_image.h"
+#include "SpriteComponent.h"
+#include "Ship.h"
+#include "BGSpriteComponent.h"
 
 namespace Engine
 {
@@ -16,9 +22,7 @@ namespace Engine
 
 	bool Game::Initialize()
 	{
-		int sdlResult = SDL_Init(SDL_INIT_VIDEO);
-
-		if (sdlResult != 0)
+		if (SDL_Init(SDL_INIT_VIDEO) != 0)
 		{
 			SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 			return false;
@@ -45,11 +49,24 @@ namespace Engine
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
 		);
 
+		if (IMG_Init(IMG_INIT_PNG) == 0)
+		{
+			SDL_Log("Unable to initialize SDL_Image: % s", SDL_GetError());
+			return false;
+		}
+
+		LoadData();
+
+		m_TicksCount = SDL_GetTicks();
+
 		return true;
 	}
 
 	void Game::Shutdown()
 	{
+		UnloadData();
+		IMG_Quit();
+		SDL_DestroyRenderer(m_Renderer);
 		SDL_DestroyWindow(m_Window);
 		SDL_Quit();
 	}
@@ -85,6 +102,61 @@ namespace Engine
 		}
 	}
 
+	void Game::AddSprite(SpriteComponent* sprite)
+	{
+		// Find the insertion point in the sorted vector
+		// (The first element with a higher draw order than me)
+		int myDrawOrder = sprite->GetDrawOrder();
+		auto iter = m_Sprites.begin();
+		for (; iter != m_Sprites.end(); ++iter)
+		{
+			if (myDrawOrder < (*iter)->GetDrawOrder())
+			{
+				break;
+			}
+		}
+
+		m_Sprites.insert(iter, sprite);
+	}
+
+	void Game::RemoveSprite(SpriteComponent* sprite)
+	{
+		// We can't swap because it ruins ordering
+		auto iter = std::find(m_Sprites.begin(), m_Sprites.end(), sprite);
+		m_Sprites.erase(iter);
+	}
+
+	SDL_Texture* Game::GetTexture(const std::string& fileName)
+	{
+		SDL_Texture* tex = nullptr;
+		auto iter = m_Textures.find(fileName);
+		if (iter != m_Textures.end())
+		{
+			tex = iter->second;
+		}
+		else
+		{
+			SDL_Surface* surf = IMG_Load(fileName.c_str());
+			if (!surf)
+			{
+				SDL_Log("Failed to load texture file %s", SDL_GetError());
+				return nullptr;
+			}
+
+			tex = SDL_CreateTextureFromSurface(m_Renderer, surf);
+			SDL_FreeSurface(surf);
+			if (!tex)
+			{
+				SDL_Log("Failed to convert surface to texture for %s", fileName.c_str());
+				return nullptr;
+			}
+
+			m_Textures.emplace(fileName.c_str(), tex);
+		}
+
+		return tex;
+	}
+
 	void Game::ProcessInput()
 	{
 		SDL_Event event;
@@ -105,6 +177,8 @@ namespace Engine
 		{
 			m_IsRunning = false;
 		}
+
+		m_Ship->ProcessKeyboard(state);
 	}
 
 	void Game::UpdateGame()
@@ -132,29 +206,78 @@ namespace Engine
 			m_Actors.emplace_back(pending);
 		}
 		m_PendingActors.clear();
+
+		// Add any dead actors to a temp vector
+		std::vector<Actor*> deadActors;
+		for (auto actor : m_Actors)
+		{
+			if (actor->GetState() == Actor::EDead)
+			{
+				deadActors.emplace_back(actor);
+			}
+		}
+
+		// Delete dead actors (which removes them from m_Actors)
+		for (auto actor : deadActors)
+		{
+			delete actor;
+		}
 	}
 
 	void Game::GenerateOutput()
 	{
-		SDL_SetRenderDrawColor(
-			m_Renderer,
-			0,
-			0,
-			255,
-			255
-		);
-
+		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
 		SDL_RenderClear(m_Renderer);
 
-		SDL_SetRenderDrawColor(
-			m_Renderer,
-			255,
-			255,
-			255,
-			255
-		);
+		for (auto sprite : m_Sprites)
+		{
+			sprite->Draw(m_Renderer);
+		}
 
 		SDL_RenderPresent(m_Renderer);
+	}
+
+	void Game::LoadData()
+	{
+		m_Ship = new Ship(this);
+		m_Ship->SetPosition(Vector2(100.0f, 384.0f));
+		m_Ship->SetScale(1.5f);
+
+		// Actor for background
+		Actor* temp = new Actor(this);
+		temp->SetPosition(Vector2(512.0f, 384.0f));
+		// Create the "far back" background
+		BGSpriteComponent* bg = new BGSpriteComponent(temp);
+		bg->SetScreenSize(Vector2(1024.0f, 768.0f));
+		std::vector<SDL_Texture*> bgtexs = {
+			GetTexture("src/Assets/Farback01.png"),
+			GetTexture("src/Assets/Farback02.png")
+		};
+		bg->SetBGTextures(bgtexs);
+		bg->SetScrollSpeed(-100.0f);
+		// Create closer background
+		bg = new BGSpriteComponent(temp, 50);
+		bg->SetScreenSize(Vector2(1024.0f, 768.0f));
+		bgtexs = {
+			GetTexture("src/Assets/Stars.png"),
+			GetTexture("src/Assets/Stars.png")
+		};
+		bg->SetBGTextures(bgtexs);
+		bg->SetScrollSpeed(-200.f);
+	}
+
+	void Game::UnloadData()
+	{
+		while (!m_Actors.empty())
+		{
+			delete m_Actors.back();
+		}
+
+		for (auto i : m_Textures)
+		{
+			SDL_DestroyTexture(i.second);
+		}
+		m_Textures.clear();
 	}
 
 	void Game::RunLoop()

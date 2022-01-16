@@ -1,8 +1,6 @@
 #pragma once
 #include <vector>
 #include "CustomMath.h"
-#include "Game.h"
-#include "Component.h"
 
 namespace Engine
 {
@@ -16,7 +14,7 @@ namespace Engine
 			EDead
 		};
 
-		Actor(Game* game);
+		Actor(class Game* game);
 		virtual ~Actor();
 
 		// Update function called from Game (not overridable)
@@ -38,8 +36,8 @@ namespace Engine
 
 		class Game* GetGame() { return m_Game; }
 
-		void AddComponent(Component* component);
-		void RemoveComponent(Component* component);
+		void AddComponent(class Component* component);
+		void RemoveComponent(class Component* component);
 
 	private:
 		State m_State;
@@ -49,7 +47,7 @@ namespace Engine
 		float m_Scale;
 		float m_Rotation;
 
-		std::vector<Component*> m_Components;
+		std::vector<class Component*> m_Components;
 		class Game* m_Game;
 	};
 }

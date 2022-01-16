@@ -12,7 +12,7 @@
 #include <memory.h>
 #include <limits>
 
-namespace Math
+namespace CustomMath
 {
 	const float Pi = 3.1415926535f;
 	const float TwoPi = Pi * 2.0f;
@@ -199,7 +199,7 @@ public:
 	// Length of vector
 	float Length() const
 	{
-		return (Math::Sqrt(LengthSq()));
+		return (CustomMath::Sqrt(LengthSq()));
 	}
 
 	// Normalize this vector
@@ -346,7 +346,7 @@ public:
 	// Length of vector
 	float Length() const
 	{
-		return (Math::Sqrt(LengthSq()));
+		return (CustomMath::Sqrt(LengthSq()));
 	}
 
 	// Normalize this vector
@@ -524,8 +524,8 @@ public:
 	{
 		float temp[3][3] =
 		{
-			{ Math::Cos(theta), Math::Sin(theta), 0.0f },
-			{ -Math::Sin(theta), Math::Cos(theta), 0.0f },
+			{ CustomMath::Cos(theta), CustomMath::Sin(theta), 0.0f },
+			{ -CustomMath::Sin(theta), CustomMath::Cos(theta), 0.0f },
 			{ 0.0f, 0.0f, 1.0f },
 		};
 		return Matrix3(temp);
@@ -748,8 +748,8 @@ public:
 		float temp[4][4] =
 		{
 			{ 1.0f, 0.0f, 0.0f , 0.0f },
-			{ 0.0f, Math::Cos(theta), Math::Sin(theta), 0.0f },
-			{ 0.0f, -Math::Sin(theta), Math::Cos(theta), 0.0f },
+			{ 0.0f, CustomMath::Cos(theta), CustomMath::Sin(theta), 0.0f },
+			{ 0.0f, -CustomMath::Sin(theta), CustomMath::Cos(theta), 0.0f },
 			{ 0.0f, 0.0f, 0.0f, 1.0f },
 		};
 		return Matrix4(temp);
@@ -760,9 +760,9 @@ public:
 	{
 		float temp[4][4] =
 		{
-			{ Math::Cos(theta), 0.0f, -Math::Sin(theta), 0.0f },
+			{ CustomMath::Cos(theta), 0.0f, -CustomMath::Sin(theta), 0.0f },
 			{ 0.0f, 1.0f, 0.0f, 0.0f },
-			{ Math::Sin(theta), 0.0f, Math::Cos(theta), 0.0f },
+			{ CustomMath::Sin(theta), 0.0f, CustomMath::Cos(theta), 0.0f },
 			{ 0.0f, 0.0f, 0.0f, 1.0f },
 		};
 		return Matrix4(temp);
@@ -773,8 +773,8 @@ public:
 	{
 		float temp[4][4] =
 		{
-			{ Math::Cos(theta), Math::Sin(theta), 0.0f, 0.0f },
-			{ -Math::Sin(theta), Math::Cos(theta), 0.0f, 0.0f },
+			{ CustomMath::Cos(theta), CustomMath::Sin(theta), 0.0f, 0.0f },
+			{ -CustomMath::Sin(theta), CustomMath::Cos(theta), 0.0f, 0.0f },
 			{ 0.0f, 0.0f, 1.0f, 0.0f },
 			{ 0.0f, 0.0f, 0.0f, 1.0f },
 		};
@@ -830,7 +830,7 @@ public:
 
 	static Matrix4 CreatePerspectiveFOV(float fovY, float width, float height, float near, float far)
 	{
-		float yScale = Math::Cot(fovY / 2.0f);
+		float yScale = CustomMath::Cot(fovY / 2.0f);
 		float xScale = yScale * height / width;
 		float temp[4][4] =
 		{
@@ -884,11 +884,11 @@ public:
 	// and the angle is in radians
 	explicit Quaternion(const Vector3& axis, float angle)
 	{
-		float scalar = Math::Sin(angle / 2.0f);
+		float scalar = CustomMath::Sin(angle / 2.0f);
 		x = axis.x * scalar;
 		y = axis.y * scalar;
 		z = axis.z * scalar;
-		w = Math::Cos(angle / 2.0f);
+		w = CustomMath::Cos(angle / 2.0f);
 	}
 
 	// Directly set the internal components
@@ -914,7 +914,7 @@ public:
 
 	float Length() const
 	{
-		return Math::Sqrt(LengthSq());
+		return CustomMath::Sqrt(LengthSq());
 	}
 
 	void Normalize()
@@ -938,10 +938,10 @@ public:
 	static Quaternion Lerp(const Quaternion& a, const Quaternion& b, float f)
 	{
 		Quaternion retVal;
-		retVal.x = Math::Lerp(a.x, b.x, f);
-		retVal.y = Math::Lerp(a.y, b.y, f);
-		retVal.z = Math::Lerp(a.z, b.z, f);
-		retVal.w = Math::Lerp(a.w, b.w, f);
+		retVal.x = CustomMath::Lerp(a.x, b.x, f);
+		retVal.y = CustomMath::Lerp(a.y, b.y, f);
+		retVal.z = CustomMath::Lerp(a.z, b.z, f);
+		retVal.w = CustomMath::Lerp(a.w, b.w, f);
 		retVal.Normalize();
 		return retVal;
 	}
@@ -966,10 +966,10 @@ public:
 
 		if (cosom < 0.9999f)
 		{
-			const float omega = Math::Acos(cosom);
-			const float invSin = 1.f / Math::Sin(omega);
-			scale0 = Math::Sin((1.f - f) * omega) * invSin;
-			scale1 = Math::Sin(f * omega) * invSin;
+			const float omega = CustomMath::Acos(cosom);
+			const float invSin = 1.f / CustomMath::Sin(omega);
+			scale0 = CustomMath::Sin((1.f - f) * omega) * invSin;
+			scale1 = CustomMath::Sin(f * omega) * invSin;
 		}
 		else
 		{
