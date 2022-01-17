@@ -5,7 +5,7 @@
 #include "SDL_image.h"
 #include "SpriteComponent.h"
 #include "Ship.h"
-#include "BGSpriteComponent.h"
+#include "Asteroid.h"
 
 namespace Engine
 {
@@ -157,6 +157,21 @@ namespace Engine
 		return tex;
 	}
 
+	void Game::AddAsteroid(Asteroid* ast)
+	{
+		m_Asteroids.emplace_back(ast);
+	}
+
+	void Game::RemoveAsteroid(Asteroid* ast)
+	{
+		auto iter = std::find(m_Asteroids.begin(),
+			m_Asteroids.end(), ast);
+		if (iter != m_Asteroids.end())
+		{
+			m_Asteroids.erase(iter);
+		}
+	}
+
 	void Game::ProcessInput()
 	{
 		SDL_Event event;
@@ -178,7 +193,12 @@ namespace Engine
 			m_IsRunning = false;
 		}
 
-		m_Ship->ProcessKeyboard(state);
+		m_UpdatingActors = true;
+		for (auto actor : m_Actors)
+		{
+			actor->ProcessInput(state);
+		}
+		m_UpdatingActors = false;
 	}
 
 	void Game::UpdateGame()
@@ -243,27 +263,12 @@ namespace Engine
 		m_Ship->SetPosition(Vector2(100.0f, 384.0f));
 		m_Ship->SetScale(1.5f);
 
-		// Actor for background
-		Actor* temp = new Actor(this);
-		temp->SetPosition(Vector2(512.0f, 384.0f));
-		// Create the "far back" background
-		BGSpriteComponent* bg = new BGSpriteComponent(temp);
-		bg->SetScreenSize(Vector2(1024.0f, 768.0f));
-		std::vector<SDL_Texture*> bgtexs = {
-			GetTexture("src/Assets/Farback01.png"),
-			GetTexture("src/Assets/Farback02.png")
-		};
-		bg->SetBGTextures(bgtexs);
-		bg->SetScrollSpeed(-100.0f);
-		// Create closer background
-		bg = new BGSpriteComponent(temp, 50);
-		bg->SetScreenSize(Vector2(1024.0f, 768.0f));
-		bgtexs = {
-			GetTexture("src/Assets/Stars.png"),
-			GetTexture("src/Assets/Stars.png")
-		};
-		bg->SetBGTextures(bgtexs);
-		bg->SetScrollSpeed(-200.f);
+		// Create asteroids
+		const int numAsteroids = 20;
+		for (int i = 0; i < numAsteroids; i++)
+		{
+			new Asteroid(this);
+		}
 	}
 
 	void Game::UnloadData()

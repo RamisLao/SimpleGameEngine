@@ -23,6 +23,11 @@ namespace Engine
 		void RemoveSprite(class SpriteComponent* sprite);
 
 		SDL_Texture* GetTexture(const std::string& fileName);
+
+		// Game-specific
+		void AddAsteroid(class Asteroid* ast);
+		void RemoveAsteroid(class Asteroid* ast);
+		std::vector<class Asteroid*>& GetAsteroids() { return m_Asteroids; }
 	private:
 		void ProcessInput();
 		void UpdateGame();
@@ -49,5 +54,6 @@ namespace Engine
 
 		// Game-specific
 		class Ship* m_Ship;
+		std::vector<class Asteroid*> m_Asteroids;
 	};
 }
