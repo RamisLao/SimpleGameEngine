@@ -6,6 +6,7 @@
 #include "SpriteComponent.h"
 #include "Ship.h"
 #include "Asteroid.h"
+#include "Random.h"
 
 namespace Engine
 {
@@ -54,6 +55,8 @@ namespace Engine
 			SDL_Log("Unable to initialize SDL_Image: % s", SDL_GetError());
 			return false;
 		}
+
+		Random::Init();
 
 		LoadData();
 

@@ -2,15 +2,16 @@
 #include "Ship.h"
 #include "AnimSpriteComponent.h"
 #include "Game.h"
+#include "InputComponent.h"
+#include "Laser.h"
 
 namespace Engine
 {
 	Ship::Ship(Game* game) :
 		Actor(game),
-		m_RightSpeed(0.0f),
-		m_DownSpeed(0.0f)
+		m_LaserCooldown(0.0f)
 	{
-		AnimSpriteComponent* asc = new AnimSpriteComponent(this);
+		AnimSpriteComponent* asc = new AnimSpriteComponent(this, 150);
 		std::vector<SDL_Texture*> anims = {
 			game->GetTexture("src/Assets/Ship01.png"),
 			game->GetTexture("src/Assets/Ship02.png"),
@@ -19,58 +20,30 @@ namespace Engine
 		};
 
 		asc->SetAnimTextures(anims);
+
+		InputComponent* ic = new InputComponent(this);
+		ic->SetForwardKey(SDL_SCANCODE_W);
+		ic->SetBackKey(SDL_SCANCODE_S);
+		ic->SetClockwiseKey(SDL_SCANCODE_A);
+		ic->SetCounterClockwiseKey(SDL_SCANCODE_D);
+		ic->SetMaxForwardSpeed(300.0f);
+		ic->SetMaxAngularSpeed(CustomMath::TwoPi);
 	}
 
 	void Ship::UpdateActor(float deltaTime)
 	{
-		Actor::UpdateActor(deltaTime);
-		Vector2 pos = GetPosition();
-		pos.x += m_RightSpeed * deltaTime;
-		pos.y += m_DownSpeed * deltaTime;
-
-		if (pos.x < 25.0f)
-		{
-			pos.x = 25.0f;
-		}
-		else if (pos.x > 500.0f)
-		{
-			pos.x = 500.0f;
-		}
-
-		if (pos.y < 25.0f)
-		{
-			pos.y = 25.0f;
-		}
-		else if (pos.y > 743.0)
-		{
-			pos.y = 743.0f;
-		}
-		SetPosition(pos);
+		m_LaserCooldown -= deltaTime;
 	}
 
-	void Ship::ProcessKeyboard(const uint8_t* state)
+	void Ship::ActorInput(const uint8_t* keyState)
 	{
-		m_RightSpeed = 0.0f;
-		m_DownSpeed = 0.0f;
-
-		if (state[SDL_SCANCODE_D])
+		if (keyState[SDL_SCANCODE_SPACE] && m_LaserCooldown <= 0.0f)
 		{
-			m_RightSpeed += 250.0f;
-		}
+			Laser* laser = new Laser(GetGame());
+			laser->SetPosition(GetPosition());
+			laser->SetRotation(GetRotation());
 
-		if (state[SDL_SCANCODE_A])
-		{
-			m_RightSpeed -= 250.0f;
-		}
-
-		if (state[SDL_SCANCODE_S])
-		{
-			m_DownSpeed += 300.0f;
-		}
-
-		if (state[SDL_SCANCODE_W])
-		{
-			m_DownSpeed -= 300.0f;
+			m_LaserCooldown = 0.5f;
 		}
 	}
 }

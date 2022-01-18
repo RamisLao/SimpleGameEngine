@@ -4,6 +4,7 @@
 #include "SpriteComponent.h"
 #include "Game.h"
 #include "MoveComponent.h"
+#include "CircleComponent.h"
 
 namespace Engine
 {
@@ -22,6 +23,9 @@ namespace Engine
 
 		MoveComponent* mc = new MoveComponent(this);
 		mc->SetForwardSpeed(150.0f);
+
+		m_Circle = new CircleComponent(this);
+		m_Circle->SetRadius(40.0f);
 
 		game->AddAsteroid(this);
 	}

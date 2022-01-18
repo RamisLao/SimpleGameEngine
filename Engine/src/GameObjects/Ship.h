@@ -8,11 +8,8 @@ namespace Engine
 	public:
 		Ship(class Game* game);
 		void UpdateActor(float deltaTime) override;
-		void ProcessKeyboard(const uint8_t* state);
-		float GetRightSpeed() const { return m_RightSpeed; }
-		float GetDownSpeed() const { return m_DownSpeed; }
+		void ActorInput(const uint8_t* keyState) override;
 	private:
-		float m_RightSpeed;
-		float m_DownSpeed;
+		float m_LaserCooldown;
 	};
 }
