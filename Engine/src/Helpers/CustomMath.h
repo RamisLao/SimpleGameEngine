@@ -159,6 +159,12 @@ public:
 	{
 		return Vector2(vec.x * scalar, vec.y * scalar);
 	}
+	
+	// Scalar division
+	friend Vector2 operator/(const Vector2& vec, float scalar)
+	{
+		return Vector2(vec.x / scalar, vec.y / scalar);
+	}
 
 	// Scalar multiplication
 	friend Vector2 operator*(float scalar, const Vector2& vec)

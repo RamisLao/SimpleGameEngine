@@ -11,5 +11,8 @@ namespace Engine
 		void ActorInput(const uint8_t* keyState) override;
 	private:
 		float m_LaserCooldown;
+		bool m_IsInvulnerable;
+		float m_InvulnerabilityCooldown;
+		class CircleComponent* m_Circle;
 	};
 }

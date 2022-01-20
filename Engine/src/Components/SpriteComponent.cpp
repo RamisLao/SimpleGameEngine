@@ -22,7 +22,7 @@ namespace Engine
 
 	void SpriteComponent::Draw(SDL_Renderer* renderer)
 	{
-		if (m_Texture)
+		if (m_Owner->GetState() == Actor::EActive && m_Texture)
 		{
 			SDL_Rect r;
 			// Scale the width/height by owner's scale

@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "CustomMath.h"
 
 namespace Engine
 {
@@ -11,6 +12,8 @@ namespace Engine
 
 		void Update(float deltaTime) override;
 
+		void AddForce(Vector2& force);
+
 		float GetAngularSpeed() const { return m_AngularSpeed; }
 		float GetForwardSpeed() const { return m_ForwardSpeed; }
 		void SetAngularSpeed(float speed) { m_AngularSpeed = speed; }
@@ -20,5 +23,9 @@ namespace Engine
 		float m_AngularSpeed;
 		// Controls forward movement (units / second)
 		float m_ForwardSpeed;
+		float m_Mass;
+		float m_MaxAcceleration;
+		Vector2 m_SumOfForces;
+		Vector2 m_Velocity;
 	};
 }

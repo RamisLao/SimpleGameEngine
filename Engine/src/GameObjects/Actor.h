@@ -11,6 +11,7 @@ namespace Engine
 		{
 			EActive,
 			EPaused,
+			EInvisible,
 			EDead
 		};
 

@@ -28,7 +28,7 @@ namespace Engine
 
 	void Actor::Update(float deltaTime)
 	{
-		if (m_State == EActive)
+		if (m_State == EActive || m_State == EInvisible)
 		{
 			UpdateComponents(deltaTime);
 			UpdateActor(deltaTime);

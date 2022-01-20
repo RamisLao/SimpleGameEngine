@@ -267,11 +267,11 @@ namespace Engine
 		m_Ship->SetScale(1.5f);
 
 		// Create asteroids
-		const int numAsteroids = 20;
+		/*const int numAsteroids = 20;
 		for (int i = 0; i < numAsteroids; i++)
 		{
 			new Asteroid(this);
-		}
+		}*/
 	}
 
 	void Game::UnloadData()

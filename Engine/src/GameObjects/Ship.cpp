@@ -4,12 +4,17 @@
 #include "Game.h"
 #include "InputComponent.h"
 #include "Laser.h"
+#include "CircleComponent.h"
+#include "Asteroid.h"
 
 namespace Engine
 {
 	Ship::Ship(Game* game) :
 		Actor(game),
-		m_LaserCooldown(0.0f)
+		m_LaserCooldown(0.0f),
+		m_IsInvulnerable(false),
+		m_InvulnerabilityCooldown(2.0),
+		m_Circle(nullptr)
 	{
 		AnimSpriteComponent* asc = new AnimSpriteComponent(this, 150);
 		std::vector<SDL_Texture*> anims = {
@@ -28,11 +33,40 @@ namespace Engine
 		ic->SetCounterClockwiseKey(SDL_SCANCODE_D);
 		ic->SetMaxForwardSpeed(300.0f);
 		ic->SetMaxAngularSpeed(CustomMath::TwoPi);
+
+		m_Circle = new CircleComponent(this);
+		m_Circle->SetRadius(6.0f);
 	}
 
 	void Ship::UpdateActor(float deltaTime)
 	{
 		m_LaserCooldown -= deltaTime;
+
+		if (m_IsInvulnerable == true)
+		{
+			m_InvulnerabilityCooldown -= deltaTime;
+			if (m_InvulnerabilityCooldown <= 0)
+			{
+				SetState(EActive);
+				m_IsInvulnerable = false;
+				m_InvulnerabilityCooldown = 2.0f;
+			}
+
+			return;
+		}
+
+		for (auto ast : GetGame()->GetAsteroids())
+		{
+			if (CircleComponent::Intersect(*m_Circle, *(ast->GetCircle())))
+			{
+				SetState(EInvisible);
+				m_IsInvulnerable = true;
+				SetPosition(Vector2(512.0f, 384.0f));
+				SetRotation(0);
+				ast->SetState(EDead);
+				break;
+			}
+		}
 	}
 
 	void Ship::ActorInput(const uint8_t* keyState)
