@@ -4,9 +4,12 @@
 // https://www.libsdl.org/projects/SDL_image/
 #include "SDL_image.h"
 #include "SpriteComponent.h"
-#include "Ship.h"
-#include "Asteroid.h"
 #include "Random.h"
+#include "BGSpriteComponent.h"
+#include "AIComponent.h"
+#include "AIState.h"
+#include "Grid.h"
+#include "Enemy.h"
 
 namespace Engine
 {
@@ -160,19 +163,27 @@ namespace Engine
 		return tex;
 	}
 
-	void Game::AddAsteroid(Asteroid* ast)
+	Enemy* Game::GetNearestEnemy(const Vector2& pos)
 	{
-		m_Asteroids.emplace_back(ast);
-	}
+		Enemy* best = nullptr;
 
-	void Game::RemoveAsteroid(Asteroid* ast)
-	{
-		auto iter = std::find(m_Asteroids.begin(),
-			m_Asteroids.end(), ast);
-		if (iter != m_Asteroids.end())
+		if (m_Enemies.size() > 0)
 		{
-			m_Asteroids.erase(iter);
+			best = m_Enemies[0];
+			// Save the distance squared of first enemy, and test if others are closer
+			float bestDistSq = (pos - m_Enemies[0]->GetPosition()).LengthSq();
+			for (size_t i = 1; i < m_Enemies.size(); i++)
+			{
+				float newDistSq = (pos - m_Enemies[i]->GetPosition()).LengthSq();
+				if (newDistSq < bestDistSq)
+				{
+					bestDistSq = newDistSq;
+					best = m_Enemies[i];
+				}
+			}
 		}
+
+		return best;
 	}
 
 	void Game::ProcessInput()
@@ -194,6 +205,19 @@ namespace Engine
 		if (state[SDL_SCANCODE_ESCAPE])
 		{
 			m_IsRunning = false;
+		}
+
+		if (state[SDL_SCANCODE_B])
+		{
+			m_Grid->BuildTower();
+		}
+
+		// Process mouse
+		int x, y;
+		Uint32 buttons = SDL_GetMouseState(&x, &y);
+		if (SDL_BUTTON(buttons) & SDL_BUTTON_LEFT)
+		{
+			m_Grid->ProcessClick(x, y);
 		}
 
 		m_UpdatingActors = true;
@@ -262,16 +286,17 @@ namespace Engine
 
 	void Game::LoadData()
 	{
-		m_Ship = new Ship(this);
-		m_Ship->SetPosition(Vector2(100.0f, 384.0f));
-		m_Ship->SetScale(1.5f);
+		m_Grid = new Grid(this);
 
-		// Create asteroids
-		/*const int numAsteroids = 20;
-		for (int i = 0; i < numAsteroids; i++)
-		{
-			new Asteroid(this);
-		}*/
+		// For testing AIComponent
+		//Actor* a = new Actor(this);
+		//AIComponent* aic = new AIComponent(a);
+		//// Register states with AIComponent
+		//aic->RegisterState(new AIPatrol(aic));
+		//aic->RegisterState(new AIDeath(aic));
+		//aic->RegisterState(new AIAttack(aic));
+		//// Start in patrol state
+		//aic->ChangeState("Patrol");
 	}
 
 	void Game::UnloadData()

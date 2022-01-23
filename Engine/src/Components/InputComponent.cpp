@@ -11,7 +11,6 @@ namespace Engine
 		m_ClockwiseKey(0),
 		m_CounterClockwiseKey(0)
 	{
-
 	}
 
 	void InputComponent::ProcessInput(const uint8_t* keyState)

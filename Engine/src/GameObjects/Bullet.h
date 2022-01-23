@@ -3,14 +3,13 @@
 
 namespace Engine
 {
-	class Laser : public Actor
+	class Bullet : public Actor
 	{
 	public:
-		Laser(class Game* game);
-
+		Bullet(class Game* game);
 		void UpdateActor(float deltaTime) override;
 	private:
 		class CircleComponent* m_Circle;
-		float m_DeathTimer;
+		float m_LiveTime;
 	};
 }

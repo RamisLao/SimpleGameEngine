@@ -25,9 +25,9 @@ namespace Engine
 		SDL_Texture* GetTexture(const std::string& fileName);
 
 		// Game-specific
-		void AddAsteroid(class Asteroid* ast);
-		void RemoveAsteroid(class Asteroid* ast);
-		std::vector<class Asteroid*>& GetAsteroids() { return m_Asteroids; }
+		class Grid* GetGrid() { return m_Grid; }
+		std::vector<class Enemy*>& GetEnemies() { return m_Enemies; }
+		class Enemy* GetNearestEnemy(const Vector2& pos);
 	private:
 		void ProcessInput();
 		void UpdateGame();
@@ -53,7 +53,8 @@ namespace Engine
 		std::vector<class SpriteComponent*> m_Sprites;
 
 		// Game-specific
-		class Ship* m_Ship;
-		std::vector<class Asteroid*> m_Asteroids;
+		std::vector<class Enemy*> m_Enemies;
+		class Grid* m_Grid;
+		float m_NextEnemy;
 	};
 }
