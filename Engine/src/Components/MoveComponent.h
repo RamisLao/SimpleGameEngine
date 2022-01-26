@@ -12,17 +12,17 @@ namespace Engine
 
 		void Update(float deltaTime) override;
 
-		float GetAngularSpeed() const { return m_AngularSpeed; }
-		float GetForwardSpeed() const { return m_ForwardSpeed; }
+		void AddForce(Vector2& force);
+
 		void SetAngularSpeed(float speed) { m_AngularSpeed = speed; }
-		void SetForwardSpeed(float speed) { m_ForwardSpeed = speed; }
+		void SetMass(float mass) { m_Mass = mass; }
+		void SetMaxVelocity(float maxVelocity) { m_MaxVelocity = maxVelocity; }
 	private:
 		// Controls rotation (radians / second)
 		float m_AngularSpeed;
-		// Controls forward movement (units / second)
-		float m_ForwardSpeed;
 		float m_Mass;
-		float m_MaxAcceleration;
+		float m_Drag;
+		float m_MaxVelocity;
 		Vector2 m_SumOfForces;
 		Vector2 m_Velocity;
 	};
