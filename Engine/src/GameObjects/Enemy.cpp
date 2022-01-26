@@ -20,7 +20,10 @@ namespace Engine
 		SetPosition(GetGame()->GetGrid()->GetStartTile()->GetPosition());
 
 		NavComponent* nc = new NavComponent(this);
-		nc->SetForwardSpeed(150.0f);
+		nc->SetMass(0.1f);
+		nc->SetMaxVelocity(150.0f);
+		nc->SetForwardSpeed(100000.0f);
+		nc->SetDrag(1.0f);
 		nc->StartPath(GetGame()->GetGrid()->GetStartTile());
 
 		m_Circle = new CircleComponent(this);

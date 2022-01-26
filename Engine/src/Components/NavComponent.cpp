@@ -20,6 +20,7 @@ namespace Engine
 			{
 				m_NextNode = m_NextNode->GetParent();
 				TurnTo(m_NextNode->GetPosition());
+				ResetVelocity();
 			}
 		}
 

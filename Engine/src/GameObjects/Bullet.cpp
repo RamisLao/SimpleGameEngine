@@ -15,7 +15,9 @@ namespace Engine
 		sc->SetTexture(game->GetTexture("src/Assets/TowerDefense/Projectile.png"));
 
 		MoveComponent* mc = new MoveComponent(this);
-		mc->SetForwardSpeed(400.0f);
+		mc->SetMass(0.1f);
+		mc->SetMaxVelocity(400.0f);
+		mc->SetForwardSpeed(40000.0f);
 
 		m_Circle = new CircleComponent(this);
 		m_Circle->SetRadius(5.0f);

@@ -9,6 +9,8 @@ namespace Engine
 	MoveComponent::MoveComponent(Actor* owner, int updateOrder) :
 		Component(owner, updateOrder),
 		m_AngularSpeed(0.0f),
+		m_ForwardSpeed(0.0f),
+		m_Static(false),
 		m_SumOfForces(Vector2::Zero),
 		m_Mass(0.0f),
 		m_Drag(0.981f),
@@ -25,7 +27,15 @@ namespace Engine
 			m_Owner->SetRotation(rot);
 		}
 
+		if (m_Static) return;
+
 		Vector2 pos = m_Owner->GetPosition();
+
+		if (m_ForwardSpeed > 0)
+		{
+			Vector2 forwardSpeed = m_Owner->GetForward() * m_ForwardSpeed * deltaTime;
+			AddForce(forwardSpeed);
+		}
 
 		Vector2 acceleration = m_SumOfForces / m_Mass;
 		m_SumOfForces = Vector2::Zero;
@@ -39,13 +49,6 @@ namespace Engine
 		}
 
 		pos += m_Velocity * deltaTime;
-
-		// (Screen wrapping code for asteroids)
-		if (pos.x < 0.0f) { pos.x = 1022.0f; }
-		else if (pos.x > 1024.0f) { pos.x = 2.0f; }
-
-		if (pos.y < 0.0f) { pos.y = 766.0f; }
-		else if (pos.y > 768.0f) { pos.y = 2.0f; }
 
 		m_Owner->SetPosition(pos);
 	}

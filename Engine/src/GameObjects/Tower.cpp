@@ -15,6 +15,7 @@ namespace Engine
 		sc->SetTexture(game->GetTexture("src/Assets/TowerDefense/Tower.png"));
 
 		m_Move = new MoveComponent(this);
+		m_Move->SetStatic(true);
 
 		m_NextAttack = AttackTime;
 	}
