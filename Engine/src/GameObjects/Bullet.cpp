@@ -12,7 +12,7 @@ namespace Engine
 		Actor(game)
 	{
 		SpriteComponent* sc = new SpriteComponent(this);
-		sc->SetTexture(game->GetTexture("src/Assets/TowerDeffense/Projectile.png"));
+		sc->SetTexture(game->GetTexture("src/Assets/TowerDefense/Projectile.png"));
 
 		MoveComponent* mc = new MoveComponent(this);
 		mc->SetForwardSpeed(400.0f);

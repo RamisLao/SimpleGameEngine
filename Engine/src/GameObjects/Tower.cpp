@@ -4,6 +4,7 @@
 #include "SpriteComponent.h"
 #include "Enemy.h"
 #include "Bullet.h"
+#include "MoveComponent.h"
 
 namespace Engine
 {
@@ -12,6 +13,8 @@ namespace Engine
 	{
 		SpriteComponent* sc = new SpriteComponent(this, 200);
 		sc->SetTexture(game->GetTexture("src/Assets/TowerDefense/Tower.png"));
+
+		m_Move = new MoveComponent(this);
 
 		m_NextAttack = AttackTime;
 	}

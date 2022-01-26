@@ -12,8 +12,6 @@ namespace Engine
 
 		void Update(float deltaTime) override;
 
-		void AddForce(Vector2& force);
-
 		float GetAngularSpeed() const { return m_AngularSpeed; }
 		float GetForwardSpeed() const { return m_ForwardSpeed; }
 		void SetAngularSpeed(float speed) { m_AngularSpeed = speed; }

@@ -15,7 +15,7 @@ namespace Engine
 		game->GetEnemies().emplace_back(this);
 
 		SpriteComponent* sc = new SpriteComponent(this);
-		sc->SetTexture(game->GetTexture("src/Assets/TowerDeffense/Airplane.png"));
+		sc->SetTexture(game->GetTexture("src/Assets/TowerDefense/Airplane.png"));
 
 		SetPosition(GetGame()->GetGrid()->GetStartTile()->GetPosition());
 

@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include "Tower.h"
 #include "Enemy.h"
+#include <algorithm>
 
 namespace Engine
 {
@@ -76,7 +77,75 @@ namespace Engine
 
 	bool Grid::FindPath(Tile* start, Tile* goal)
 	{
-		return true;
+		for (size_t i = 0; i < NumRows; i++)
+		{
+			for (size_t j = 0; j < NumCols; j++)
+			{
+				m_Tiles[i][j]->g = 0.0f;
+				m_Tiles[i][j]->m_InOpenSet = false;
+				m_Tiles[i][j]->m_InClosedSet = false;
+			}
+		}
+
+		std::vector<Tile*> openSet;
+
+		Tile* current = start;
+		current->m_InClosedSet = true;
+
+		do
+		{
+			for (Tile* neighbor : current->m_Adjacent)
+			{
+				if (neighbor->m_Blocked)
+				{
+					continue;
+				}
+
+				// Only check nodes that aren't in the closed set
+				if (!neighbor->m_InClosedSet)
+				{
+					if (!neighbor->m_InOpenSet)
+					{
+						// Not in the open set, so set parent
+						neighbor->m_Parent = current;
+						neighbor->h = (neighbor->GetPosition() - goal->GetPosition()).Length();
+						// g(x) is the parent's g plus cost of traversing edge
+						neighbor->g = current->g + TileSize;
+						neighbor->f = neighbor->g + neighbor->h;
+						openSet.emplace_back(neighbor);
+						neighbor->m_InOpenSet = true;
+					}
+					else
+					{
+						float newG = current->g + TileSize;
+						if (newG < neighbor->g)
+						{
+							neighbor->m_Parent = current;
+							neighbor->g = newG;
+							neighbor->f = neighbor->g + neighbor->h;
+						}
+					}
+				}
+			}
+
+			if (openSet.empty())
+			{
+				break;
+			}
+
+			auto iter = std::min_element(openSet.begin(), openSet.end(),
+				[](Tile* a, Tile* b)
+				{
+					return a->f < b->f;
+				});
+			current = *iter;
+			openSet.erase(iter);
+			current->m_InOpenSet = false;
+			current->m_InClosedSet = true;
+
+		} while (current != goal);
+
+		return (current == goal) ? true : false;
 	}
 
 	void Grid::BuildTower()
@@ -102,6 +171,13 @@ namespace Engine
 	void Grid::UpdateActor(float deltaTime)
 	{
 		Actor::UpdateActor(deltaTime);
+
+		m_NextEnemy -= deltaTime;
+		if (m_NextEnemy <= 0.0f)
+		{
+			new Enemy(GetGame());
+			m_NextEnemy += EnemyTime;
+		}
 	}
 
 	Tile* Grid::GetStartTile()
@@ -134,14 +210,18 @@ namespace Engine
 		{
 			for (size_t j = 0; j < NumCols; j++)
 			{
-				if (!(i == GetStartTile()->GetPosition().x &&
-					  j == GetStartTile()->GetPosition().y) &&
-					!(i == GetEndTile()->GetPosition().x) &&
-					  j == GetEndTile()->GetPosition().y)
+				if (!(i == 3 && j == 0) && !(i == 3 && j == 15))
 				{
 					m_Tiles[i][j]->SetTileState(Tile::EDefault);
 				}
 			}
+		}
+
+		Tile* t = start->m_Parent;
+		while (t != GetEndTile())
+		{
+			t->SetTileState(Tile::EPath);
+			t = t->m_Parent;
 		}
 	}
 }

@@ -27,18 +27,6 @@ namespace Engine
 		if (!CustomMath::NearZero(m_SumOfForces.Length()))
 		{
 			Vector2 pos = m_Owner->GetPosition();
-
-			/*Vector2 acceleration = m_SumOfForces / m_Mass;
-			m_SumOfForces = Vector2::Zero;
-
-			if (acceleration.Length() >= m_MaxAcceleration)
-			{
-				acceleration.Normalize();
-				acceleration *= m_MaxAcceleration;
-			}
-
-			m_Velocity += acceleration * deltaTime;
-			pos += m_Velocity * deltaTime;*/
 			pos += m_Owner->GetForward() * m_ForwardSpeed * deltaTime;
 
 			// (Screen wrapping code for asteroids)
@@ -50,10 +38,5 @@ namespace Engine
 
 			m_Owner->SetPosition(pos);
 		}
-	}
-
-	void MoveComponent::AddForce(Vector2& force)
-	{
-		m_SumOfForces += force;
 	}
 }

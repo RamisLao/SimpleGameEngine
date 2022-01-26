@@ -18,14 +18,10 @@ namespace Engine
 		float forwardSpeed = 0.0f;
 		if (keyState[m_ForwardKey])
 		{
-			/*Vector2 force = m_Owner->GetForward() * m_MaxForwardSpeed;
-			AddForce(force);*/
 			forwardSpeed += m_MaxForwardSpeed;
 		}
 		if (keyState[m_BackKey])
 		{
-			/*Vector2 force = m_Owner->GetForward() * -1 * m_MaxForwardSpeed;
-			AddForce(force);*/
 			forwardSpeed -= m_MaxForwardSpeed;
 		}
 		SetForwardSpeed(forwardSpeed);
