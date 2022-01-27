@@ -14,7 +14,8 @@ namespace Engine
 		m_SumOfForces(Vector2::Zero),
 		m_Mass(0.0f),
 		m_Drag(0.981f),
-		m_MaxVelocity(0.0f)
+		m_MaxVelocity(0.0f),
+		m_ScreenWrap(false)
 	{
 	}
 
@@ -49,6 +50,16 @@ namespace Engine
 		}
 
 		pos += m_Velocity * deltaTime;
+
+		if (m_ScreenWrap)
+		{
+			// (Screen wrapping code for asteroids)
+			if (pos.x < 0.0f) { pos.x = 1022.0f; }
+			else if (pos.x > 1024.0f) { pos.x = 2.0f; }
+
+			if (pos.y < 0.0f) { pos.y = 766.0f; }
+			else if (pos.y > 768.0f) { pos.y = 2.0f; }
+		}
 
 		m_Owner->SetPosition(pos);
 	}

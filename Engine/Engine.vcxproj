@@ -61,7 +61,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\GameObjects\Asteroids;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -103,6 +103,9 @@
     <ClCompile Include="src\Components\BGSpriteComponent.cpp" />
     <ClCompile Include="src\Components\Component.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\GameObjects\Asteroids\Asteroid.cpp" />
+    <ClCompile Include="src\GameObjects\Asteroids\Laser.cpp" />
+    <ClCompile Include="src\GameObjects\Asteroids\Ship.cpp" />
     <ClCompile Include="src\GameObjects\Bullet.cpp" />
     <ClCompile Include="src\GameObjects\Enemy.cpp" />
     <ClCompile Include="src\GameObjects\Grid.cpp" />
@@ -126,6 +129,9 @@
     <ClInclude Include="src\Components\BGSpriteComponent.h" />
     <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\GameObjects\Asteroids\Asteroid.h" />
+    <ClInclude Include="src\GameObjects\Asteroids\Laser.h" />
+    <ClInclude Include="src\GameObjects\Asteroids\Ship.h" />
     <ClInclude Include="src\GameObjects\Bullet.h" />
     <ClInclude Include="src\GameObjects\Enemy.h" />
     <ClInclude Include="src\GameObjects\Grid.h" />
@@ -134,6 +140,68 @@
     <ClInclude Include="src\Helpers\CustomMath.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Helpers\Random.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\Assets\AnimatedShip\Character01.png" />
+    <Image Include="src\Assets\AnimatedShip\Character02.png" />
+    <Image Include="src\Assets\AnimatedShip\Character03.png" />
+    <Image Include="src\Assets\AnimatedShip\Character04.png" />
+    <Image Include="src\Assets\AnimatedShip\Character05.png" />
+    <Image Include="src\Assets\AnimatedShip\Character06.png" />
+    <Image Include="src\Assets\AnimatedShip\Character07.png" />
+    <Image Include="src\Assets\AnimatedShip\Character08.png" />
+    <Image Include="src\Assets\AnimatedShip\Character09.png" />
+    <Image Include="src\Assets\AnimatedShip\Character10.png" />
+    <Image Include="src\Assets\AnimatedShip\Character11.png" />
+    <Image Include="src\Assets\AnimatedShip\Character12.png" />
+    <Image Include="src\Assets\AnimatedShip\Character13.png" />
+    <Image Include="src\Assets\AnimatedShip\Character14.png" />
+    <Image Include="src\Assets\AnimatedShip\Character15.png" />
+    <Image Include="src\Assets\AnimatedShip\Character16.png" />
+    <Image Include="src\Assets\AnimatedShip\Character17.png" />
+    <Image Include="src\Assets\AnimatedShip\Character18.png" />
+    <Image Include="src\Assets\AnimatedShip\Enemy01.png" />
+    <Image Include="src\Assets\AnimatedShip\Enemy02.png" />
+    <Image Include="src\Assets\AnimatedShip\Enemy03.png" />
+    <Image Include="src\Assets\AnimatedShip\Enemy04.png" />
+    <Image Include="src\Assets\AnimatedShip\Enemy05.png" />
+    <Image Include="src\Assets\AnimatedShip\Enemy06.png" />
+    <Image Include="src\Assets\AnimatedShip\Farback01.png" />
+    <Image Include="src\Assets\AnimatedShip\Farback02.png" />
+    <Image Include="src\Assets\AnimatedShip\Laser.png" />
+    <Image Include="src\Assets\AnimatedShip\Ship01.png" />
+    <Image Include="src\Assets\AnimatedShip\Ship02.png" />
+    <Image Include="src\Assets\AnimatedShip\Ship03.png" />
+    <Image Include="src\Assets\AnimatedShip\Ship04.png" />
+    <Image Include="src\Assets\AnimatedShip\Stars.png" />
+    <Image Include="src\Assets\AnimatedShip\Tiles.png" />
+    <Image Include="src\Assets\Asteroids\Asteroid.png" />
+    <Image Include="src\Assets\Asteroids\Laser.png" />
+    <Image Include="src\Assets\Asteroids\Ship.png" />
+    <Image Include="src\Assets\Asteroids\ShipWithThrust.png" />
+    <Image Include="src\Assets\TowerDefense\Airplane.png" />
+    <Image Include="src\Assets\TowerDefense\Base.png" />
+    <Image Include="src\Assets\TowerDefense\Missile.png" />
+    <Image Include="src\Assets\TowerDefense\Projectile.png" />
+    <Image Include="src\Assets\TowerDefense\TileBrown.png" />
+    <Image Include="src\Assets\TowerDefense\TileBrownSelected.png" />
+    <Image Include="src\Assets\TowerDefense\TileGreen.png" />
+    <Image Include="src\Assets\TowerDefense\TileGreenSelected.png" />
+    <Image Include="src\Assets\TowerDefense\TileGrey.png" />
+    <Image Include="src\Assets\TowerDefense\TileGreySelected.png" />
+    <Image Include="src\Assets\TowerDefense\TileTan.png" />
+    <Image Include="src\Assets\TowerDefense\TileTanSelected.png" />
+    <Image Include="src\Assets\TowerDefense\Tower.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Assets\AnimatedShip\Character.txt" />
+    <Text Include="src\Assets\AnimatedShip\LICENSE.txt" />
+    <Text Include="src\Assets\TowerDefense\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Assets\AnimatedShip\MapLayer1.csv" />
+    <None Include="src\Assets\AnimatedShip\MapLayer2.csv" />
+    <None Include="src\Assets\AnimatedShip\MapLayer3.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

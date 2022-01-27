@@ -15,6 +15,7 @@ namespace Engine
 		void AddForce(Vector2& force);
 		void ResetVelocity() { m_Velocity = Vector2::Zero; }
 
+		void SetScreenWrap(bool screenWrap) { m_ScreenWrap = screenWrap; }
 		void SetAngularSpeed(float speed) { m_AngularSpeed = speed; }
 		void SetForwardSpeed(float speed) { m_ForwardSpeed = speed; }
 		void SetStatic(bool staticBool) { m_Static = staticBool; }
@@ -22,6 +23,7 @@ namespace Engine
 		void SetDrag(float drag) { m_Drag = drag; }
 		void SetMaxVelocity(float maxVelocity) { m_MaxVelocity = maxVelocity; }
 	private:
+		bool m_ScreenWrap;
 		// Controls rotation (radians / second)
 		float m_AngularSpeed;
 		float m_ForwardSpeed;

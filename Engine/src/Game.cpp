@@ -10,6 +10,8 @@
 #include "AIState.h"
 #include "Grid.h"
 #include "Enemy.h"
+#include "Asteroid.h"
+#include "Ship.h"
 
 namespace Engine
 {
@@ -207,19 +209,6 @@ namespace Engine
 			m_IsRunning = false;
 		}
 
-		if (state[SDL_SCANCODE_B])
-		{
-			m_Grid->BuildTower();
-		}
-
-		// Process mouse
-		int x, y;
-		Uint32 buttons = SDL_GetMouseState(&x, &y);
-		if (SDL_BUTTON(buttons) & SDL_BUTTON_LEFT)
-		{
-			m_Grid->ProcessClick(x, y);
-		}
-
 		m_UpdatingActors = true;
 		for (auto actor : m_Actors)
 		{
@@ -286,17 +275,16 @@ namespace Engine
 
 	void Game::LoadData()
 	{
-		m_Grid = new Grid(this);
+		m_Ship = new Ship(this);
+		m_Ship->SetPosition(Vector2(100.0f, 384.0f));
+		m_Ship->SetScale(1.5f);
 
-		// For testing AIComponent
-		//Actor* a = new Actor(this);
-		//AIComponent* aic = new AIComponent(a);
-		//// Register states with AIComponent
-		//aic->RegisterState(new AIPatrol(aic));
-		//aic->RegisterState(new AIDeath(aic));
-		//aic->RegisterState(new AIAttack(aic));
-		//// Start in patrol state
-		//aic->ChangeState("Patrol");
+		// Create asteroids
+		const int numAsteroids = 20;
+		for (int i = 0; i < numAsteroids; i++)
+		{
+			new Asteroid(this);
+		}
 	}
 
 	void Game::UnloadData()
@@ -320,6 +308,21 @@ namespace Engine
 			ProcessInput();
 			UpdateGame();
 			GenerateOutput();
+		}
+	}
+
+	void Game::AddAsteroid(Asteroid* ast)
+	{
+		m_Asteroids.emplace_back(ast);
+	}
+
+	void Game::RemoveAsteroid(Asteroid* ast)
+	{
+		auto iter = std::find(m_Asteroids.begin(),
+			m_Asteroids.end(), ast);
+		if (iter != m_Asteroids.end())
+		{
+			m_Asteroids.erase(iter);
 		}
 	}
 }

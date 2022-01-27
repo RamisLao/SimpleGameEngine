@@ -78,6 +78,15 @@
     <ClCompile Include="src\GameObjects\Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameObjects\Asteroids\Asteroid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjects\Asteroids\Laser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjects\Asteroids\Ship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -137,5 +146,176 @@
     <ClInclude Include="src\GameObjects\Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GameObjects\Asteroids\Asteroid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\Asteroids\Laser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\Asteroids\Ship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\Assets\Asteroids\Asteroid.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Asteroids\Laser.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Asteroids\Ship.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Asteroids\ShipWithThrust.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character04.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character05.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character06.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character07.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character08.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character09.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character10.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character12.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character13.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character14.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character15.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character17.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Character18.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Enemy01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Enemy02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Enemy03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Enemy04.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Enemy05.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Enemy06.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Farback01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Farback02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Laser.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Ship01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Ship02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Ship03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Ship04.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Stars.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\AnimatedShip\Tiles.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\Airplane.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\Base.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\Missile.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\Projectile.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\TileBrown.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\TileBrownSelected.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\TileGreen.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\TileGreenSelected.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\TileGrey.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\TileGreySelected.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\TileTan.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\TileTanSelected.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\TowerDefense\Tower.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Assets\AnimatedShip\Character.txt" />
+    <Text Include="src\Assets\AnimatedShip\LICENSE.txt" />
+    <Text Include="src\Assets\TowerDefense\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Assets\AnimatedShip\MapLayer1.csv" />
+    <None Include="src\Assets\AnimatedShip\MapLayer2.csv" />
+    <None Include="src\Assets\AnimatedShip\MapLayer3.csv" />
   </ItemGroup>
 </Project>
