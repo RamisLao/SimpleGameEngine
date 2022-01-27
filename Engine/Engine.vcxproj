@@ -61,7 +61,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\GameObjects\Asteroids;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\GameObjects\TowerDefense;src\GameObjects\Asteroids;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -106,11 +106,11 @@
     <ClCompile Include="src\GameObjects\Asteroids\Asteroid.cpp" />
     <ClCompile Include="src\GameObjects\Asteroids\Laser.cpp" />
     <ClCompile Include="src\GameObjects\Asteroids\Ship.cpp" />
-    <ClCompile Include="src\GameObjects\Bullet.cpp" />
-    <ClCompile Include="src\GameObjects\Enemy.cpp" />
-    <ClCompile Include="src\GameObjects\Grid.cpp" />
-    <ClCompile Include="src\GameObjects\Tile.cpp" />
-    <ClCompile Include="src\GameObjects\Tower.cpp" />
+    <ClCompile Include="src\GameObjects\TowerDefense\Bullet.cpp" />
+    <ClCompile Include="src\GameObjects\TowerDefense\Enemy.cpp" />
+    <ClCompile Include="src\GameObjects\TowerDefense\Grid.cpp" />
+    <ClCompile Include="src\GameObjects\TowerDefense\Tile.cpp" />
+    <ClCompile Include="src\GameObjects\TowerDefense\Tower.cpp" />
     <ClCompile Include="src\Helpers\Random.cpp" />
     <ClCompile Include="src\Helpers\Search.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -132,11 +132,11 @@
     <ClInclude Include="src\GameObjects\Asteroids\Asteroid.h" />
     <ClInclude Include="src\GameObjects\Asteroids\Laser.h" />
     <ClInclude Include="src\GameObjects\Asteroids\Ship.h" />
-    <ClInclude Include="src\GameObjects\Bullet.h" />
-    <ClInclude Include="src\GameObjects\Enemy.h" />
-    <ClInclude Include="src\GameObjects\Grid.h" />
-    <ClInclude Include="src\GameObjects\Tile.h" />
-    <ClInclude Include="src\GameObjects\Tower.h" />
+    <ClInclude Include="src\GameObjects\TowerDefense\Bullet.h" />
+    <ClInclude Include="src\GameObjects\TowerDefense\Enemy.h" />
+    <ClInclude Include="src\GameObjects\TowerDefense\Grid.h" />
+    <ClInclude Include="src\GameObjects\TowerDefense\Tile.h" />
+    <ClInclude Include="src\GameObjects\TowerDefense\Tower.h" />
     <ClInclude Include="src\Helpers\CustomMath.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Helpers\Random.h" />

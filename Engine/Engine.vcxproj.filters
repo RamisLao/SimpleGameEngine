@@ -60,22 +60,22 @@
     <ClCompile Include="src\Helpers\Search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObjects\Grid.cpp">
+    <ClCompile Include="src\GameObjects\TowerDefense\Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObjects\Tile.cpp">
+    <ClCompile Include="src\GameObjects\TowerDefense\Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObjects\Enemy.cpp">
+    <ClCompile Include="src\GameObjects\TowerDefense\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObjects\Tower.cpp">
+    <ClCompile Include="src\GameObjects\TowerDefense\Tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Components\NavComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameObjects\Bullet.cpp">
+    <ClCompile Include="src\GameObjects\TowerDefense\Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObjects\Asteroids\Asteroid.cpp">
@@ -128,22 +128,22 @@
     <ClInclude Include="src\Components\AIComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\Grid.h">
+    <ClInclude Include="src\GameObjects\TowerDefense\Grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\Tile.h">
+    <ClInclude Include="src\GameObjects\TowerDefense\Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\Enemy.h">
+    <ClInclude Include="src\GameObjects\TowerDefense\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\Tower.h">
+    <ClInclude Include="src\GameObjects\TowerDefense\Tower.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\NavComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjects\Bullet.h">
+    <ClInclude Include="src\GameObjects\TowerDefense\Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\GameObjects\Asteroids\Asteroid.h">
