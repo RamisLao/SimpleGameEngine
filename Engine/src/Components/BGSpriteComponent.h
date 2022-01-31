@@ -11,7 +11,7 @@ namespace Engine
 	public:
 		BGSpriteComponent(class Actor* owner, int drawOrder = 10);
 		void Update(float deltaTime) override;
-		void Draw(SDL_Renderer* renderer) override;
+		void Draw(Shader* shader) override;
 		void SetBGTextures(const std::vector<SDL_Texture*>& textures);
 		void SetScreenSize(const Vector2 size) { m_ScreenSize = size; }
 		void SetScrollSpeed(float speed) { m_ScrollSpeed = speed; }

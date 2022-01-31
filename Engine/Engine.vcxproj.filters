@@ -57,9 +57,6 @@
     <ClCompile Include="src\Components\AIComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Helpers\Search.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\GameObjects\TowerDefense\Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -85,6 +82,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObjects\Asteroids\Ship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGL\VertexArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGL\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -153,6 +156,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\GameObjects\Asteroids\Ship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenGL\VertexArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenGL\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -317,5 +326,7 @@
     <None Include="src\Assets\AnimatedShip\MapLayer1.csv" />
     <None Include="src\Assets\AnimatedShip\MapLayer2.csv" />
     <None Include="src\Assets\AnimatedShip\MapLayer3.csv" />
+    <None Include="src\Shaders\Basic.vert" />
+    <None Include="src\Shaders\Basic.frag" />
   </ItemGroup>
 </Project>

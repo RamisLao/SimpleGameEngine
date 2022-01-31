@@ -48,7 +48,7 @@
     <OutDir>..\bin\Debug-windows-x64\Engine\</OutDir>
     <IntDir>..\bin-int\Debug-windows-x64\Engine\</IntDir>
     <IncludePath>$(SolutionDir)$(ProjectName)\vendor\SDL\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(SolutionDir)$(ProjectName)\vendor\SDL\lib\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <LibraryPath>$(SolutionDir)$(ProjectName)\vendor\SDL\lib\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)$(ProjectName)\vendor\GLEW\lib\Release\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -59,17 +59,18 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\GameObjects\TowerDefense;src\GameObjects\Asteroids;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\OpenGL;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include;$(SolutionDir)$(ProjectName)\vendor\GLEW\include;src\OpenGL</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(ProjectName)\vendor\SDL\lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(ProjectName)\vendor\SDL\lib\x64;$(SolutionDir)$(ProjectName)\vendor\GLEW\lib\Release\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -112,10 +113,11 @@
     <ClCompile Include="src\GameObjects\TowerDefense\Tile.cpp" />
     <ClCompile Include="src\GameObjects\TowerDefense\Tower.cpp" />
     <ClCompile Include="src\Helpers\Random.cpp" />
-    <ClCompile Include="src\Helpers\Search.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Helpers\CustomMath.cpp" />
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
+    <ClCompile Include="src\OpenGL\Shader.cpp" />
+    <ClCompile Include="src\OpenGL\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\AIState.h" />
@@ -140,6 +142,8 @@
     <ClInclude Include="src\Helpers\CustomMath.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Helpers\Random.h" />
+    <ClInclude Include="src\OpenGL\Shader.h" />
+    <ClInclude Include="src\OpenGL\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Assets\AnimatedShip\Character01.png" />
@@ -202,6 +206,8 @@
     <None Include="src\Assets\AnimatedShip\MapLayer1.csv" />
     <None Include="src\Assets\AnimatedShip\MapLayer2.csv" />
     <None Include="src\Assets\AnimatedShip\MapLayer3.csv" />
+    <None Include="src\Shaders\Basic.frag" />
+    <None Include="src\Shaders\Basic.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

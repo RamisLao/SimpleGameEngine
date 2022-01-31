@@ -41,6 +41,8 @@ namespace Engine
 		void ProcessInput();
 		void UpdateGame();
 		void GenerateOutput();
+		bool LoadShaders();
+		void CreateSpriteVerts();
 		void LoadData();
 		void UnloadData();
 
@@ -51,6 +53,7 @@ namespace Engine
 		Uint32 m_TicksCount;
 
 		SDL_Window* m_Window;
+		SDL_GLContext m_Context;
 		SDL_Renderer* m_Renderer;
 
 		std::vector<class Actor*> m_Actors;
@@ -61,8 +64,13 @@ namespace Engine
 		// All the sprite components drawn
 		std::vector<class SpriteComponent*> m_Sprites;
 
-		// Game-specific
+		// Sprite Shader
+		class Shader* m_SpriteShader;
+		// Sprite vertex array
+		class VertexArray* m_SpriteVerts;
 
+		/////////////////////////////////////////////////////////////////
+		// Game-specific
 		// Tower Defense
 		std::vector<class Enemy*> m_Enemies;
 		class Grid* m_Grid;

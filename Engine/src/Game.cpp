@@ -3,15 +3,14 @@
 #include "Actor.h"
 // https://www.libsdl.org/projects/SDL_image/
 #include "SDL_image.h"
+#include "GL/glew.h"
 #include "SpriteComponent.h"
 #include "Random.h"
-#include "BGSpriteComponent.h"
-#include "AIComponent.h"
-#include "AIState.h"
-#include "Grid.h"
-#include "Enemy.h"
-#include "Asteroid.h"
-#include "Ship.h"
+#include "GameObjects/Asteroids/Asteroid.h"
+#include "GameObjects/Asteroids/Ship.h"
+#include "GameObjects/TowerDefense/Enemy.h"
+#include "VertexArray.h"
+#include "Shader.h"
 
 namespace Engine
 {
@@ -28,11 +27,29 @@ namespace Engine
 
 	bool Game::Initialize()
 	{
-		if (SDL_Init(SDL_INIT_VIDEO) != 0)
+		if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0)
 		{
 			SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 			return false;
 		}
+
+		// Set OpenGL attributes
+		// Use the core OpenGL profile
+		// Available profiles: Core, Compatibility (deprecated features available), ES (mobile)
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
+							SDL_GL_CONTEXT_PROFILE_CORE);
+		// Specify version 3.3
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+		// Request a color buffer with 8-bits per RGBA channel
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+		// Enable double buffering
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		// Run on GPU
+		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
 		m_Window = SDL_CreateWindow(
 			"Simple Game Engine",
@@ -40,7 +57,7 @@ namespace Engine
 			100,
 			1024,
 			768,
-			0
+			SDL_WINDOW_OPENGL
 		);
 
 		if (!m_Window)
@@ -49,17 +66,27 @@ namespace Engine
 			return false;
 		}
 
-		m_Renderer = SDL_CreateRenderer(
-			m_Window,
-			-1,
-			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
-		);
+		m_Context = SDL_GL_CreateContext(m_Window);
 
-		if (IMG_Init(IMG_INIT_PNG) == 0)
+		// Prevents initialization errors
+		glewExperimental = GL_TRUE;
+		if (glewInit() != GLEW_OK)
 		{
-			SDL_Log("Unable to initialize SDL_Image: % s", SDL_GetError());
+			SDL_Log("Failed to initialize GLEW");
 			return false;
 		}
+
+		// Clear benign error on some platforms
+		glGetError();
+
+		if (!LoadShaders())
+		{
+			SDL_Log("Failed to load shaders.");
+			return false;
+		}
+
+		// Create quad for drawing sprites
+		CreateSpriteVerts();
 
 		Random::Init();
 
@@ -262,15 +289,48 @@ namespace Engine
 
 	void Game::GenerateOutput()
 	{
-		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
-		SDL_RenderClear(m_Renderer);
+		glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		m_SpriteShader->SetActive();
+		m_SpriteVerts->SetActive();
 
 		for (auto sprite : m_Sprites)
 		{
-			sprite->Draw(m_Renderer);
+			sprite->Draw(m_SpriteShader);
 		}
 
-		SDL_RenderPresent(m_Renderer);
+		SDL_GL_SwapWindow(m_Window);
+	}
+
+	bool Game::LoadShaders()
+	{
+		m_SpriteShader = new Shader();
+		if (!m_SpriteShader->Load("src/Shaders/Basic.vert", "src/Shaders/Basic.frag"))
+		{
+			return false;
+		}
+
+		m_SpriteShader->SetActive();
+
+		return true;
+	}
+
+	void Game::CreateSpriteVerts()
+	{
+		float vertices[] = {
+			-0.5f, 0.5f, 0.f,
+			0.5, 0.5, 0.f,
+			0.5, -0.5f, 0.f,
+			-0.5, -0.5, 0.f
+		};
+
+		unsigned int indices[] = {
+			0, 1, 2,
+			2, 3, 0
+		};
+
+		m_SpriteVerts = new VertexArray(vertices, 4, indices, 6);
 	}
 
 	void Game::LoadData()

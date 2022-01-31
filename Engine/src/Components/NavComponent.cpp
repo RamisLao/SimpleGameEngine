@@ -1,7 +1,7 @@
 
 #include "NavComponent.h"
 #include "Actor.h"
-#include "Tile.h"
+#include "GameObjects/TowerDefense/Tile.h"
 
 namespace Engine
 {
