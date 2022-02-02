@@ -37,6 +37,8 @@ namespace Engine
 		float GetRotation() const { return m_Rotation; }
 		void SetRotation(float rotation) { m_Rotation = rotation; }
 
+		void ComputeWorldTransform();
+
 		// In the Unit Circle, +y is up. In SDL, +y is down. So, we need to 
 		// invert the sign of the y-component value
 		Vector2 GetForward() const
@@ -56,9 +58,14 @@ namespace Engine
 		State m_State;
 
 		// Transform
+		// We need a Matrix4 because the vertex layout assumes 3D (x, y, z), even if the z component is not used in 2D
+		// Homogenous coordinates for 3D are (x, y, z, w)
+		Matrix4 m_WorldTransform;
 		Vector2 m_Position;
 		float m_Scale;
 		float m_Rotation;
+		// We recompute the WT only if one of the components changes
+		bool m_RecomputeWorldTransform;
 
 		std::vector<class Component*> m_Components;
 		class Game* m_Game;

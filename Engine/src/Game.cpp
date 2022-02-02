@@ -266,6 +266,7 @@ namespace Engine
 		// Move any pending actors to m_Actors
 		for (auto pending : m_PendingActors)
 		{
+			pending->ComputeWorldTransform();
 			m_Actors.emplace_back(pending);
 		}
 		m_PendingActors.clear();
