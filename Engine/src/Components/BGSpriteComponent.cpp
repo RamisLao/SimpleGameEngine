@@ -1,6 +1,7 @@
 
 #include "BGSpriteComponent.h"
 #include "Actor.h"
+#include "Texture.h"
 
 namespace Engine
 {
@@ -30,7 +31,7 @@ namespace Engine
 		
 	}
 
-	void BGSpriteComponent::SetBGTextures(const std::vector<SDL_Texture*>& textures)
+	void BGSpriteComponent::SetBGTextures(const std::vector<Texture*>& textures)
 	{
 		int count = 0;
 		for (auto tex : textures)

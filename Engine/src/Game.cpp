@@ -11,6 +11,7 @@
 #include "GameObjects/TowerDefense/Enemy.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 namespace Engine
 {
@@ -88,8 +89,6 @@ namespace Engine
 		// Create quad for drawing sprites
 		CreateSpriteVerts();
 
-		Random::Init();
-
 		LoadData();
 
 		m_TicksCount = SDL_GetTicks();
@@ -100,8 +99,10 @@ namespace Engine
 	void Game::Shutdown()
 	{
 		UnloadData();
-		IMG_Quit();
-		SDL_DestroyRenderer(m_Renderer);
+		delete m_SpriteVerts;
+		m_SpriteShader->Unload();
+		delete m_SpriteShader;
+		SDL_GL_DeleteContext(m_Context);
 		SDL_DestroyWindow(m_Window);
 		SDL_Quit();
 	}
@@ -161,9 +162,9 @@ namespace Engine
 		m_Sprites.erase(iter);
 	}
 
-	SDL_Texture* Game::GetTexture(const std::string& fileName)
+	Texture* Game::GetTexture(const std::string& fileName)
 	{
-		SDL_Texture* tex = nullptr;
+		Texture* tex = nullptr;
 		auto iter = m_Textures.find(fileName);
 		if (iter != m_Textures.end())
 		{
@@ -171,22 +172,16 @@ namespace Engine
 		}
 		else
 		{
-			SDL_Surface* surf = IMG_Load(fileName.c_str());
-			if (!surf)
+			tex = new Texture();
+			if (tex->Load(fileName))
 			{
-				SDL_Log("Failed to load texture file %s", SDL_GetError());
-				return nullptr;
+				m_Textures.emplace(fileName, tex);
 			}
-
-			tex = SDL_CreateTextureFromSurface(m_Renderer, surf);
-			SDL_FreeSurface(surf);
-			if (!tex)
+			else
 			{
-				SDL_Log("Failed to convert surface to texture for %s", fileName.c_str());
-				return nullptr;
+				delete tex;
+				tex = nullptr;
 			}
-
-			m_Textures.emplace(fileName.c_str(), tex);
 		}
 
 		return tex;
@@ -307,12 +302,15 @@ namespace Engine
 	bool Game::LoadShaders()
 	{
 		m_SpriteShader = new Shader();
-		if (!m_SpriteShader->Load("src/Shaders/Basic.vert", "src/Shaders/Basic.frag"))
+		if (!m_SpriteShader->Load("src/Shaders/Sprite.vert", "src/Shaders/Sprite.frag"))
 		{
 			return false;
 		}
 
 		m_SpriteShader->SetActive();
+		// Set the view-projection matrix
+		Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1024.f, 768.f);
+		m_SpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
 		return true;
 	}
@@ -320,10 +318,10 @@ namespace Engine
 	void Game::CreateSpriteVerts()
 	{
 		float vertices[] = {
-			-0.5f, 0.5f, 0.f,
-			0.5, 0.5, 0.f,
-			0.5, -0.5f, 0.f,
-			-0.5, -0.5, 0.f
+			-0.5f,  0.5f, 0.f, 0.f, 0.f, // top left
+			 0.5f,  0.5f, 0.f, 1.f, 0.f, // top right	
+			 0.5f, -0.5f, 0.f, 1.f, 1.f, // bottom right
+			-0.5f, -0.5f, 0.f, 0.f, 1.f  // bottom left
 		};
 
 		unsigned int indices[] = {
@@ -337,15 +335,14 @@ namespace Engine
 	void Game::LoadData()
 	{
 		m_Ship = new Ship(this);
-		m_Ship->SetPosition(Vector2(100.0f, 384.0f));
-		m_Ship->SetScale(1.5f);
+		m_Ship->SetRotation(CustomMath::PiOver2);
 
-		// Create asteroids
-		const int numAsteroids = 20;
-		for (int i = 0; i < numAsteroids; i++)
-		{
-			new Asteroid(this);
-		}
+		//// Create asteroids
+		//const int numAsteroids = 20;
+		//for (int i = 0; i < numAsteroids; i++)
+		//{
+		//	new Asteroid(this);
+		//}
 	}
 
 	void Game::UnloadData()
@@ -357,7 +354,8 @@ namespace Engine
 
 		for (auto i : m_Textures)
 		{
-			SDL_DestroyTexture(i.second);
+			i.second->Unload();
+			delete i.second;
 		}
 		m_Textures.clear();
 	}

@@ -90,6 +90,9 @@
     <ClCompile Include="src\OpenGL\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\OpenGL\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -162,6 +165,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\OpenGL\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenGL\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -328,5 +334,8 @@
     <None Include="src\Assets\AnimatedShip\MapLayer3.csv" />
     <None Include="src\Shaders\Basic.vert" />
     <None Include="src\Shaders\Basic.frag" />
+    <None Include="src\Shaders\Transform.vert" />
+    <None Include="src\Shaders\Sprite.vert" />
+    <None Include="src\Shaders\Sprite.frag" />
   </ItemGroup>
 </Project>

@@ -61,15 +61,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\OpenGL;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include;$(SolutionDir)$(ProjectName)\vendor\GLEW\include;src\OpenGL</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\OpenGL;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include;$(SolutionDir)$(ProjectName)\vendor\GLEW\include;$(SolutionDir)$(ProjectName)\vendor\soil\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(ProjectName)\vendor\SDL\lib\x64;$(SolutionDir)$(ProjectName)\vendor\GLEW\lib\Release\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(ProjectName)\vendor\SDL\lib\x64;$(SolutionDir)$(ProjectName)\vendor\GLEW\lib\Release\x64;$(SolutionDir)$(ProjectName)\vendor\soil\lib\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SOIL.lib;opengl32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -117,6 +117,7 @@
     <ClCompile Include="src\Helpers\CustomMath.cpp" />
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\OpenGL\Shader.cpp" />
+    <ClCompile Include="src\OpenGL\Texture.cpp" />
     <ClCompile Include="src\OpenGL\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +144,7 @@
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Helpers\Random.h" />
     <ClInclude Include="src\OpenGL\Shader.h" />
+    <ClInclude Include="src\OpenGL\Texture.h" />
     <ClInclude Include="src\OpenGL\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +210,9 @@
     <None Include="src\Assets\AnimatedShip\MapLayer3.csv" />
     <None Include="src\Shaders\Basic.frag" />
     <None Include="src\Shaders\Basic.vert" />
+    <None Include="src\Shaders\Sprite.frag" />
+    <None Include="src\Shaders\Sprite.vert" />
+    <None Include="src\Shaders\Transform.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

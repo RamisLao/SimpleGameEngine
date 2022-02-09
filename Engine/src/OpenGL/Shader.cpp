@@ -56,6 +56,19 @@ namespace Engine
 		glUseProgram(m_ShaderProgram);
 	}
 
+	void Shader::SetMatrixUniform(const char* name, const Matrix4& matrix)
+	{
+		// Find the uniform by name
+		// `name` is the name of the variable in the shader
+		GLuint loc = glGetUniformLocation(m_ShaderProgram, name);
+		glUniformMatrix4fv(
+			loc,						// Uniform ID
+			1,							// Number of matrices
+			GL_TRUE,					// Set to TRUE if using row vectors
+			matrix.GetAsFloatPtr()		// Pointer to matrix data
+		);
+	}
+
 	bool Shader::CompileShader(const std::string& fileName, GLenum shaderType, GLuint& outShader)
 	{
 		// Open file

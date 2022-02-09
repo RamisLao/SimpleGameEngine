@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include "CustomMath.h"
 #include <iostream>
+#include "SDL_log.h"
 
 namespace Engine
 {
@@ -54,11 +55,11 @@ namespace Engine
 		if (m_ScreenWrap)
 		{
 			// (Screen wrapping code for asteroids)
-			if (pos.x < 0.0f) { pos.x = 1022.0f; }
-			else if (pos.x > 1024.0f) { pos.x = 2.0f; }
+			if (pos.x < -512.0f) { pos.x = 510.f; }
+			else if (pos.x > 512.0f) { pos.x = -510.f; }
 
-			if (pos.y < 0.0f) { pos.y = 766.0f; }
-			else if (pos.y > 768.0f) { pos.y = 2.0f; }
+			if (pos.y < -384.0f) { pos.y = 382.0f; }
+			else if (pos.y > 384.0f) { pos.y = -382.0f; }
 		}
 
 		m_Owner->SetPosition(pos);

@@ -1,11 +1,12 @@
 
 #include "Ship.h"
-#include "AnimSpriteComponent.h"
+#include "SpriteComponent.h"
 #include "Game.h"
 #include "InputComponent.h"
 #include "Laser.h"
 #include "CircleComponent.h"
 #include "Asteroid.h"
+#include "Texture.h"
 
 namespace Engine
 {
@@ -16,15 +17,8 @@ namespace Engine
 		m_InvulnerabilityCooldown(2.0),
 		m_Circle(nullptr)
 	{
-		AnimSpriteComponent* asc = new AnimSpriteComponent(this, 150);
-		std::vector<SDL_Texture*> anims = {
-			game->GetTexture("src/Assets/AnimatedShip/Ship01.png"),
-			game->GetTexture("src/Assets/AnimatedShip/Ship02.png"),
-			game->GetTexture("src/Assets/AnimatedShip/Ship03.png"),
-			game->GetTexture("src/Assets/AnimatedShip/Ship04.png")
-		};
-
-		asc->SetAnimTextures(anims);
+		SpriteComponent* sc = new SpriteComponent(this, 150);
+		sc->SetTexture(game->GetTexture("src/Assets/Asteroids/Ship.png"));
 
 		InputComponent* ic = new InputComponent(this);
 		ic->SetForwardKey(SDL_SCANCODE_W);

@@ -1,5 +1,6 @@
 
 #include "AnimSpriteComponent.h"
+#include "Texture.h"
 
 namespace Engine
 {
@@ -26,7 +27,7 @@ namespace Engine
 		SetTexture(m_AnimTextures[static_cast<int>(m_CurrentFrame)]);
 	}
 
-	void AnimSpriteComponent::SetAnimTextures(const std::vector<SDL_Texture*>& textures)
+	void AnimSpriteComponent::SetAnimTextures(const std::vector<Texture*>& textures)
 	{
 		m_AnimTextures = textures;
 		if (m_AnimTextures.size() > 0)

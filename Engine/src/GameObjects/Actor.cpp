@@ -11,7 +11,7 @@ namespace Engine
 		m_Scale(1.0f),
 		m_Rotation(0.0f),
 		m_Game(game),
-		m_RecomputeWorldTransform(true);
+		m_RecomputeWorldTransform(true)
 	{
 		m_Game->AddActor(this);
 	}
@@ -77,12 +77,13 @@ namespace Engine
 			m_WorldTransform = Matrix4::CreateScale(m_Scale);
 			m_WorldTransform *= Matrix4::CreateRotationZ(m_Rotation);
 			m_WorldTransform *= Matrix4::CreateTranslation(Vector3(m_Position.x, m_Position.y, 0.0f));
+
+			for (auto comp : m_Components)
+			{
+				comp->OnUpdateWorldTransform();
+			}
 		}
 
-		for (auto comp : m_Components)
-		{
-			comp->OnUpdateWorldTransform();
-		}
 	}
 
 	void Actor::AddComponent(Component* component)

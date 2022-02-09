@@ -17,6 +17,8 @@ namespace Engine
 		void Unload();
 		// Set this as the active shader program
 		void SetActive();
+		// Sets a Matrix uniform
+		void SetMatrixUniform(const char* name, const Matrix4& matrix);
 	private:
 		//Tries to compile the specified shader
 		bool CompileShader(const std::string& fileName,

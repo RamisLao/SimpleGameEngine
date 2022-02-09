@@ -1,6 +1,5 @@
 #pragma once
 #include "Component.h"
-#include "SDL.h"
 #include "CustomMath.h"
 
 namespace Engine
@@ -13,13 +12,13 @@ namespace Engine
 		~SpriteComponent();
 
 		virtual void Draw(class Shader* shader);
-		virtual void SetTexture(SDL_Texture* texture);
+		virtual void SetTexture(class Texture* texture);
 
 		int GetDrawOrder() const { return m_DrawOrder; }
 		int GetTexHeight() const { return m_TexHeight; }
 		int GetTexWidth() const { return m_TexWidth; }
 	private:
-		SDL_Texture* m_Texture;
+		class Texture* m_Texture;
 		int m_DrawOrder;
 		int m_TexWidth;
 		int m_TexHeight;

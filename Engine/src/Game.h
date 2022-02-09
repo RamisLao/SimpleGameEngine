@@ -24,7 +24,7 @@ namespace Engine
 		void AddSprite(class SpriteComponent* sprite);
 		void RemoveSprite(class SpriteComponent* sprite);
 
-		SDL_Texture* GetTexture(const std::string& fileName);
+		class Texture* GetTexture(const std::string& fileName);
 
 		// Game-specific
 
@@ -47,7 +47,7 @@ namespace Engine
 		void UnloadData();
 
 		// Map of textures loaded
-		std::unordered_map<std::string, SDL_Texture*> m_Textures;
+		std::unordered_map<std::string, class Texture*> m_Textures;
 
 		bool m_IsRunning;
 		Uint32 m_TicksCount;

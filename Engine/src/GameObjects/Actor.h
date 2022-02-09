@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "CustomMath.h"
+#include <iostream>
 
 namespace Engine
 {
@@ -31,19 +32,28 @@ namespace Engine
 
 		// Getters/Setters
 		const Vector2& GetPosition() const { return m_Position; }
-		void SetPosition(const Vector2& pos) { m_Position = pos; }
+		void SetPosition(const Vector2& pos) {
+			m_Position = pos;
+			m_RecomputeWorldTransform = true;
+		}
 		float GetScale() const { return m_Scale; }
-		void SetScale(float scale) { m_Scale = scale; }
+		void SetScale(float scale) {
+			m_Scale = scale; 
+			m_RecomputeWorldTransform = true;
+		}
 		float GetRotation() const { return m_Rotation; }
-		void SetRotation(float rotation) { m_Rotation = rotation; }
+		void SetRotation(float rotation) {
+			m_Rotation = rotation; 
+			m_RecomputeWorldTransform = true;
+		}
 
 		void ComputeWorldTransform();
+		const Matrix4& GetWorldTransform() const { return m_WorldTransform; }
 
-		// In the Unit Circle, +y is up. In SDL, +y is down. So, we need to 
-		// invert the sign of the y-component value
+		// We don't need to invert the rotation anymore
 		Vector2 GetForward() const
 		{
-			return Vector2(CustomMath::Cos(m_Rotation), -CustomMath::Sin(m_Rotation));
+			return Vector2(CustomMath::Cos(m_Rotation), CustomMath::Sin(m_Rotation));
 		}
 
 		State GetState() const { return m_State; }
