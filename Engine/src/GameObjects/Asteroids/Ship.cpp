@@ -1,6 +1,7 @@
 
 #include "Ship.h"
 #include "SpriteComponent.h"
+#include "AnimSpriteComponent.h"
 #include "Game.h"
 #include "InputComponent.h"
 #include "Laser.h"
@@ -17,8 +18,18 @@ namespace Engine
 		m_InvulnerabilityCooldown(2.0),
 		m_Circle(nullptr)
 	{
-		SpriteComponent* sc = new SpriteComponent(this, 150);
-		sc->SetTexture(game->GetTexture("src/Assets/Asteroids/Ship.png"));
+
+		AnimSpriteComponent* asc = new AnimSpriteComponent(this, 150);
+		std::vector<Texture*> anims = {
+			game->GetTexture("src/Assets/AnimatedShip/Ship01.png"),
+			game->GetTexture("src/Assets/AnimatedShip/Ship02.png"),
+			game->GetTexture("src/Assets/AnimatedShip/Ship03.png"),
+			game->GetTexture("src/Assets/AnimatedShip/Ship04.png")
+		};
+
+		asc->SetAnimTextures(anims);
+
+		SetScale(1.5f);
 
 		InputComponent* ic = new InputComponent(this);
 		ic->SetForwardKey(SDL_SCANCODE_W);
@@ -58,8 +69,8 @@ namespace Engine
 			{
 				SetState(EInvisible);
 				m_IsInvulnerable = true;
-				SetPosition(Vector2(512.0f, 384.0f));
-				SetRotation(0);
+				SetPosition(Vector2::Zero);
+				SetRotation(CustomMath::PiOver2);
 				ast->SetState(EDead);
 				break;
 			}

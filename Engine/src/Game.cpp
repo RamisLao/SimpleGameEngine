@@ -288,6 +288,10 @@ namespace Engine
 		glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// Enable alpha blending on the color buffer
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		m_SpriteShader->SetActive();
 		m_SpriteVerts->SetActive();
 
@@ -337,12 +341,12 @@ namespace Engine
 		m_Ship = new Ship(this);
 		m_Ship->SetRotation(CustomMath::PiOver2);
 
-		//// Create asteroids
-		//const int numAsteroids = 20;
-		//for (int i = 0; i < numAsteroids; i++)
-		//{
-		//	new Asteroid(this);
-		//}
+		// Create asteroids
+		const int numAsteroids = 20;
+		for (int i = 0; i < numAsteroids; i++)
+		{
+			new Asteroid(this);
+		}
 	}
 
 	void Game::UnloadData()

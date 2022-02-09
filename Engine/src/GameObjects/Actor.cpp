@@ -54,7 +54,7 @@ namespace Engine
 
 	void Actor::ProcessInput(const uint8_t* keyState)
 	{
-		if (m_State == EActive)
+		if (m_State == EActive || m_State == EInvisible)
 		{
 			for (auto comp : m_Components)
 			{

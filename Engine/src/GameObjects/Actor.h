@@ -50,7 +50,7 @@ namespace Engine
 		void ComputeWorldTransform();
 		const Matrix4& GetWorldTransform() const { return m_WorldTransform; }
 
-		// We don't need to invert the rotation anymore
+		// We don't need to invert the rotation anymore because +y means up
 		Vector2 GetForward() const
 		{
 			return Vector2(CustomMath::Cos(m_Rotation), CustomMath::Sin(m_Rotation));
