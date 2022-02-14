@@ -11,7 +11,8 @@ uniform mat4 uViewProj;
 // Corresponds to the data stored for each vertex in the vertex buffer (vertex attributes)
 // Attribute 0 is position, 1 is tex coords
 layout(location = 0) in vec3 inPosition;
-layout(location = 1) in vec2 inTexCoord;
+layout(location = 1) in vec3 inNormal;
+layout(location = 2) in vec2 inTexCoord;
 
 // The fragment shader needs to know the texture coordinates to determine the color
 // at the pixel

@@ -7,9 +7,9 @@ namespace Engine
 {
 	Actor::Actor(Game* game) :
 		m_State(EActive),
-		m_Position(Vector2::Zero),
+		m_Position(Vector3::Zero),
 		m_Scale(1.0f),
-		m_Rotation(0.0f),
+		m_Rotation(Quaternion::Identity),
 		m_Game(game),
 		m_RecomputeWorldTransform(true)
 	{
@@ -75,7 +75,7 @@ namespace Engine
 		{
 			m_RecomputeWorldTransform = false;
 			m_WorldTransform = Matrix4::CreateScale(m_Scale);
-			m_WorldTransform *= Matrix4::CreateRotationZ(m_Rotation);
+			m_WorldTransform *= Matrix4::CreateFromQuaternion(m_Rotation);
 			m_WorldTransform *= Matrix4::CreateTranslation(Vector3(m_Position.x, m_Position.y, 0.0f));
 
 			for (auto comp : m_Components)

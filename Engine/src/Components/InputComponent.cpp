@@ -19,12 +19,12 @@ namespace Engine
 	{
 		if (keyState[m_ForwardKey])
 		{
-			Vector2 force = m_Owner->GetForward() * m_ForwardForce;
+			Vector3 force = m_Owner->GetForward() * m_ForwardForce;
 			AddForce(force);
 		}
 		if (keyState[m_BackKey])
 		{
-			Vector2 force = m_Owner->GetForward() * -1 * m_ForwardForce;
+			Vector3 force = m_Owner->GetForward() * -1 * m_ForwardForce;
 			AddForce(force);
 		}
 

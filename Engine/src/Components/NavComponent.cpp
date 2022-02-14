@@ -15,7 +15,7 @@ namespace Engine
 	{
 		if (m_NextNode)
 		{
-			Vector2 diff = m_Owner->GetPosition() - m_NextNode->GetPosition();
+			Vector3 diff = m_Owner->GetPosition() - m_NextNode->GetPosition();
 			if (CustomMath::NearZero(diff.Length(), 2.0f))
 			{
 				m_NextNode = m_NextNode->GetParent();
@@ -33,12 +33,11 @@ namespace Engine
 		TurnTo(m_NextNode->GetPosition());
 	}
 
-	void NavComponent::TurnTo(const Vector2& pos)
+	void NavComponent::TurnTo(const Vector3& pos)
 	{
-		Vector2 dir = pos - m_Owner->GetPosition();
+		Vector3 dir = pos - m_Owner->GetPosition();
 		// New angle is just atan2 of this dir vector
 		// (Negate y because +y is down on screen
-		float angle = CustomMath::Atan2(-dir.y, dir.x);
-		m_Owner->SetRotation(angle);
+		//m_Owner->SetRotation();
 	}
 }

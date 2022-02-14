@@ -12,7 +12,7 @@ namespace Engine
 		m_AngularSpeed(0.0f),
 		m_ForwardSpeed(0.0f),
 		m_Static(false),
-		m_SumOfForces(Vector2::Zero),
+		m_SumOfForces(Vector3::Zero),
 		m_Mass(0.0f),
 		m_Drag(0.981f),
 		m_MaxVelocity(0.0f),
@@ -24,23 +24,26 @@ namespace Engine
 	{
 		if (!CustomMath::NearZero(m_AngularSpeed))
 		{
-			float rot = m_Owner->GetRotation();
-			rot += m_AngularSpeed * deltaTime;
+			Quaternion rot = m_Owner->GetRotation();
+			float angle = m_AngularSpeed * deltaTime;
+			// Create quaternion for incremental rotation
+			// Rotate about up axis
+			Quaternion inc(Vector3::UnitZ, angle);
 			m_Owner->SetRotation(rot);
 		}
 
 		if (m_Static) return;
 
-		Vector2 pos = m_Owner->GetPosition();
+		Vector3 pos = m_Owner->GetPosition();
 
 		if (m_ForwardSpeed > 0)
 		{
-			Vector2 forwardSpeed = m_Owner->GetForward() * m_ForwardSpeed * deltaTime;
+			Vector3 forwardSpeed = m_Owner->GetForward() * m_ForwardSpeed * deltaTime;
 			AddForce(forwardSpeed);
 		}
 
-		Vector2 acceleration = m_SumOfForces / m_Mass;
-		m_SumOfForces = Vector2::Zero;
+		Vector3 acceleration = m_SumOfForces / m_Mass;
+		m_SumOfForces = Vector3::Zero;
 
 		m_Velocity += acceleration * deltaTime;
 		m_Velocity *= m_Drag;
@@ -65,7 +68,7 @@ namespace Engine
 		m_Owner->SetPosition(pos);
 	}
 
-	void MoveComponent::AddForce(Vector2& force)
+	void MoveComponent::AddForce(Vector3& force)
 	{
 		m_SumOfForces += force;
 	}

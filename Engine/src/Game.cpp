@@ -187,29 +187,6 @@ namespace Engine
 		return tex;
 	}
 
-	Enemy* Game::GetNearestEnemy(const Vector2& pos)
-	{
-		Enemy* best = nullptr;
-
-		if (m_Enemies.size() > 0)
-		{
-			best = m_Enemies[0];
-			// Save the distance squared of first enemy, and test if others are closer
-			float bestDistSq = (pos - m_Enemies[0]->GetPosition()).LengthSq();
-			for (size_t i = 1; i < m_Enemies.size(); i++)
-			{
-				float newDistSq = (pos - m_Enemies[i]->GetPosition()).LengthSq();
-				if (newDistSq < bestDistSq)
-				{
-					bestDistSq = newDistSq;
-					best = m_Enemies[i];
-				}
-			}
-		}
-
-		return best;
-	}
-
 	void Game::ProcessInput()
 	{
 		SDL_Event event;
@@ -322,10 +299,10 @@ namespace Engine
 	void Game::CreateSpriteVerts()
 	{
 		float vertices[] = {
-			-0.5f,  0.5f, 0.f, 0.f, 0.f, // top left
-			 0.5f,  0.5f, 0.f, 1.f, 0.f, // top right	
-			 0.5f, -0.5f, 0.f, 1.f, 1.f, // bottom right
-			-0.5f, -0.5f, 0.f, 0.f, 1.f  // bottom left
+			-0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, // top left
+			 0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, // top right	
+			 0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f, 1.f, // bottom right
+			-0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f  // bottom left
 		};
 
 		unsigned int indices[] = {
@@ -338,15 +315,7 @@ namespace Engine
 
 	void Game::LoadData()
 	{
-		m_Ship = new Ship(this);
-		m_Ship->SetRotation(CustomMath::PiOver2);
 
-		// Create asteroids
-		const int numAsteroids = 20;
-		for (int i = 0; i < numAsteroids; i++)
-		{
-			new Asteroid(this);
-		}
 	}
 
 	void Game::UnloadData()

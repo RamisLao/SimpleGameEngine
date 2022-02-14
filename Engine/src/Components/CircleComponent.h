@@ -12,7 +12,7 @@ namespace Engine
 		void SetRadius(float radius) { m_Radius = radius; }
 		float GetRadius() const;
 
-		const Vector2& GetCenter() const;
+		const Vector3& GetCenter() const;
 
 		static bool Intersect(const CircleComponent& a, const CircleComponent& b);
 	private:

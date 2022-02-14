@@ -69,8 +69,7 @@ namespace Engine
 			{
 				SetState(EInvisible);
 				m_IsInvulnerable = true;
-				SetPosition(Vector2::Zero);
-				SetRotation(CustomMath::PiOver2);
+				SetPosition(Vector3::Zero);
 				ast->SetState(EDead);
 				break;
 			}

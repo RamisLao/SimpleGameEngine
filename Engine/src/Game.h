@@ -28,11 +28,6 @@ namespace Engine
 
 		// Game-specific
 
-		// Tower Defense
-		class Grid* GetGrid() { return m_Grid; }
-		std::vector<class Enemy*>& GetEnemies() { return m_Enemies; }
-		class Enemy* GetNearestEnemy(const Vector2& pos);
-
 		// Asteroids
 		void AddAsteroid(class Asteroid* ast);
 		void RemoveAsteroid(class Asteroid* ast);
@@ -71,11 +66,7 @@ namespace Engine
 
 		/////////////////////////////////////////////////////////////////
 		// Game-specific
-		// Tower Defense
-		std::vector<class Enemy*> m_Enemies;
-		class Grid* m_Grid;
-		float m_NextEnemy;
-
+		
 		// Asteroids
 		class Ship* m_Ship;
 		std::vector<class Asteroid*> m_Asteroids;

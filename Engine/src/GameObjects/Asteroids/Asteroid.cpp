@@ -40,7 +40,7 @@ namespace Engine
 
 	void Asteroid::UpdateActor(float deltaTime)
 	{
-		Vector2 force = GetForward() * m_Speed * deltaTime;
+		Vector3 force = GetForward() * m_Speed * deltaTime;
 		m_Move->AddForce(force);
 	}
 }

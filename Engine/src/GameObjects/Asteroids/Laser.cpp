@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "CircleComponent.h"
 #include "Asteroid.h"
+#include "Texture.h"
 
 namespace Engine
 {
@@ -27,7 +28,7 @@ namespace Engine
 
 	void Laser::UpdateActor(float deltaTime)
 	{
-		Vector2 force = GetForward() * m_Speed * deltaTime;
+		Vector3 force = GetForward() * m_Speed * deltaTime;
 		m_Move->AddForce(force);
 
 		m_DeathTimer -= deltaTime;

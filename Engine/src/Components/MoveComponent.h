@@ -12,8 +12,8 @@ namespace Engine
 
 		void Update(float deltaTime) override;
 
-		void AddForce(Vector2& force);
-		void ResetVelocity() { m_Velocity = Vector2::Zero; }
+		void AddForce(Vector3& force);
+		void ResetVelocity() { m_Velocity = Vector3::Zero; }
 
 		void SetScreenWrap(bool screenWrap) { m_ScreenWrap = screenWrap; }
 		void SetAngularSpeed(float speed) { m_AngularSpeed = speed; }
@@ -32,7 +32,7 @@ namespace Engine
 		float m_Mass;
 		float m_Drag;
 		float m_MaxVelocity;
-		Vector2 m_SumOfForces;
-		Vector2 m_Velocity;
+		Vector3 m_SumOfForces;
+		Vector3 m_Velocity;
 	};
 }

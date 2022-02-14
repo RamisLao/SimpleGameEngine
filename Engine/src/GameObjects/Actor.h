@@ -31,8 +31,8 @@ namespace Engine
 		virtual void ActorInput(const uint8_t* keyState);
 
 		// Getters/Setters
-		const Vector2& GetPosition() const { return m_Position; }
-		void SetPosition(const Vector2& pos) {
+		const Vector3& GetPosition() const { return m_Position; }
+		void SetPosition(const Vector3& pos) {
 			m_Position = pos;
 			m_RecomputeWorldTransform = true;
 		}
@@ -41,8 +41,8 @@ namespace Engine
 			m_Scale = scale; 
 			m_RecomputeWorldTransform = true;
 		}
-		float GetRotation() const { return m_Rotation; }
-		void SetRotation(float rotation) {
+		Quaternion GetRotation() const { return m_Rotation; }
+		void SetRotation(Quaternion rotation) {
 			m_Rotation = rotation; 
 			m_RecomputeWorldTransform = true;
 		}
@@ -51,10 +51,7 @@ namespace Engine
 		const Matrix4& GetWorldTransform() const { return m_WorldTransform; }
 
 		// We don't need to invert the rotation anymore because +y means up
-		Vector2 GetForward() const
-		{
-			return Vector2(CustomMath::Cos(m_Rotation), CustomMath::Sin(m_Rotation));
-		}
+		Vector3 GetForward() const { return Vector3::Transform(Vector3::UnitX, m_Rotation); }
 
 		State GetState() const { return m_State; }
 		void SetState(State state) { m_State = state; }
@@ -71,9 +68,9 @@ namespace Engine
 		// We need a Matrix4 because the vertex layout assumes 3D (x, y, z), even if the z component is not used in 2D
 		// Homogenous coordinates for 3D are (x, y, z, w)
 		Matrix4 m_WorldTransform;
-		Vector2 m_Position;
+		Vector3 m_Position;
 		float m_Scale;
-		float m_Rotation;
+		Quaternion m_Rotation;
 		// We recompute the WT only if one of the components changes
 		bool m_RecomputeWorldTransform;
 
