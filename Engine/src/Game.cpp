@@ -6,12 +6,13 @@
 #include "GL/glew.h"
 #include "SpriteComponent.h"
 #include "Random.h"
-#include "GameObjects/Asteroids/Asteroid.h"
-#include "GameObjects/Asteroids/Ship.h"
-#include "GameObjects/TowerDefense/Enemy.h"
 #include "VertexArray.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Renderer.h"
+#include "CameraActor.h"
+#include "MeshComponent.h"
+#include "Mesh.h"
 
 namespace Engine
 {
@@ -19,7 +20,6 @@ namespace Engine
 	const float paddleH = 100.0f;
 
 	Game::Game():
-		m_Window(nullptr),
 		m_Renderer(nullptr),
 		m_IsRunning(true),
 		m_TicksCount(0)
@@ -34,60 +34,14 @@ namespace Engine
 			return false;
 		}
 
-		// Set OpenGL attributes
-		// Use the core OpenGL profile
-		// Available profiles: Core, Compatibility (deprecated features available), ES (mobile)
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
-							SDL_GL_CONTEXT_PROFILE_CORE);
-		// Specify version 3.3
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		// Request a color buffer with 8-bits per RGBA channel
-		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-		// Enable double buffering
-		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		// Run on GPU
-		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-
-		m_Window = SDL_CreateWindow(
-			"Simple Game Engine",
-			100,
-			100,
-			1024,
-			768,
-			SDL_WINDOW_OPENGL
-		);
-
-		if (!m_Window)
+		m_Renderer = new Renderer(this);
+		if (!m_Renderer->Initialize(1024.f, 768.f))
 		{
-			SDL_Log("Failed to create window: % s", SDL_GetError());
+			SDL_Log("Failed to initialize renderer");
+			delete m_Renderer;
+			m_Renderer = nullptr;
 			return false;
 		}
-
-		m_Context = SDL_GL_CreateContext(m_Window);
-
-		// Prevents initialization errors
-		glewExperimental = GL_TRUE;
-		if (glewInit() != GLEW_OK)
-		{
-			SDL_Log("Failed to initialize GLEW");
-			return false;
-		}
-
-		// Clear benign error on some platforms
-		glGetError();
-
-		if (!LoadShaders())
-		{
-			SDL_Log("Failed to load shaders.");
-			return false;
-		}
-
-		// Create quad for drawing sprites
-		CreateSpriteVerts();
 
 		LoadData();
 
@@ -99,11 +53,10 @@ namespace Engine
 	void Game::Shutdown()
 	{
 		UnloadData();
-		delete m_SpriteVerts;
-		m_SpriteShader->Unload();
-		delete m_SpriteShader;
-		SDL_GL_DeleteContext(m_Context);
-		SDL_DestroyWindow(m_Window);
+		if (m_Renderer)
+		{
+			m_Renderer->Shutdown();
+		}
 		SDL_Quit();
 	}
 
@@ -136,55 +89,6 @@ namespace Engine
 			std::iter_swap(iter, m_Actors.end() - 1);
 			m_Actors.pop_back();
 		}
-	}
-
-	void Game::AddSprite(SpriteComponent* sprite)
-	{
-		// Find the insertion point in the sorted vector
-		// (The first element with a higher draw order than me)
-		int myDrawOrder = sprite->GetDrawOrder();
-		auto iter = m_Sprites.begin();
-		for (; iter != m_Sprites.end(); ++iter)
-		{
-			if (myDrawOrder < (*iter)->GetDrawOrder())
-			{
-				break;
-			}
-		}
-
-		m_Sprites.insert(iter, sprite);
-	}
-
-	void Game::RemoveSprite(SpriteComponent* sprite)
-	{
-		// We can't swap because it ruins ordering
-		auto iter = std::find(m_Sprites.begin(), m_Sprites.end(), sprite);
-		m_Sprites.erase(iter);
-	}
-
-	Texture* Game::GetTexture(const std::string& fileName)
-	{
-		Texture* tex = nullptr;
-		auto iter = m_Textures.find(fileName);
-		if (iter != m_Textures.end())
-		{
-			tex = iter->second;
-		}
-		else
-		{
-			tex = new Texture();
-			if (tex->Load(fileName))
-			{
-				m_Textures.emplace(fileName, tex);
-			}
-			else
-			{
-				delete tex;
-				tex = nullptr;
-			}
-		}
-
-		return tex;
 	}
 
 	void Game::ProcessInput()
@@ -262,60 +166,19 @@ namespace Engine
 
 	void Game::GenerateOutput()
 	{
-		glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		// Enable alpha blending on the color buffer
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		m_SpriteShader->SetActive();
-		m_SpriteVerts->SetActive();
-
-		for (auto sprite : m_Sprites)
-		{
-			sprite->Draw(m_SpriteShader);
-		}
-
-		SDL_GL_SwapWindow(m_Window);
-	}
-
-	bool Game::LoadShaders()
-	{
-		m_SpriteShader = new Shader();
-		if (!m_SpriteShader->Load("src/Shaders/Sprite.vert", "src/Shaders/Sprite.frag"))
-		{
-			return false;
-		}
-
-		m_SpriteShader->SetActive();
-		// Set the view-projection matrix
-		Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1024.f, 768.f);
-		m_SpriteShader->SetMatrixUniform("uViewProj", viewProj);
-
-		return true;
-	}
-
-	void Game::CreateSpriteVerts()
-	{
-		float vertices[] = {
-			-0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, // top left
-			 0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, // top right	
-			 0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f, 1.f, // bottom right
-			-0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f  // bottom left
-		};
-
-		unsigned int indices[] = {
-			0, 1, 2,
-			2, 3, 0
-		};
-
-		m_SpriteVerts = new VertexArray(vertices, 4, indices, 6);
+		m_Renderer->Draw();
 	}
 
 	void Game::LoadData()
 	{
+		// Create actors
+		Actor* a = new Actor(this);
+		a->SetPosition(Vector3(200.f, 75.f, 0.f));
+		a->SetScale(100.f);
+		MeshComponent* mc = new MeshComponent(a);
+		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Cube.gpmesh"));
 
+		m_CameraActor = new CameraActor(this);
 	}
 
 	void Game::UnloadData()
@@ -325,12 +188,10 @@ namespace Engine
 			delete m_Actors.back();
 		}
 
-		for (auto i : m_Textures)
+		if (m_Renderer)
 		{
-			i.second->Unload();
-			delete i.second;
+			m_Renderer->UnloadData();
 		}
-		m_Textures.clear();
 	}
 
 	void Game::RunLoop()
@@ -340,21 +201,6 @@ namespace Engine
 			ProcessInput();
 			UpdateGame();
 			GenerateOutput();
-		}
-	}
-
-	void Game::AddAsteroid(Asteroid* ast)
-	{
-		m_Asteroids.emplace_back(ast);
-	}
-
-	void Game::RemoveAsteroid(Asteroid* ast)
-	{
-		auto iter = std::find(m_Asteroids.begin(),
-			m_Asteroids.end(), ast);
-		if (iter != m_Asteroids.end())
-		{
-			m_Asteroids.erase(iter);
 		}
 	}
 }
