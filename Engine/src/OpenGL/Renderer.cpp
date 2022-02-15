@@ -51,8 +51,8 @@ namespace Engine
 			"Simple Game Engine",
 			100,
 			100,
-			1024,
-			768,
+			static_cast<int>(m_ScreenWidth),
+			static_cast<int>(m_ScreenHeight),
 			SDL_WINDOW_OPENGL
 		);
 
@@ -245,7 +245,7 @@ namespace Engine
 
 		m_SpriteShader->SetActive();
 		// Set the view-projection matrix
-		Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1024.f, 768.f);
+		Matrix4 viewProj = Matrix4::CreateSimpleViewProj(m_ScreenWidth, m_ScreenHeight);
 		m_SpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
 		m_MeshShader = new Shader();
