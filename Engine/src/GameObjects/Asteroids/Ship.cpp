@@ -4,10 +4,10 @@
 #include "AnimSpriteComponent.h"
 #include "Game.h"
 #include "InputComponent.h"
-#include "Laser.h"
 #include "CircleComponent.h"
 #include "Asteroid.h"
 #include "Texture.h"
+#include "Renderer.h"
 
 namespace Engine
 {
@@ -21,10 +21,11 @@ namespace Engine
 
 		AnimSpriteComponent* asc = new AnimSpriteComponent(this, 150);
 		std::vector<Texture*> anims = {
-			game->GetTexture("src/Assets/AnimatedShip/Ship01.png"),
-			game->GetTexture("src/Assets/AnimatedShip/Ship02.png"),
-			game->GetTexture("src/Assets/AnimatedShip/Ship03.png"),
-			game->GetTexture("src/Assets/AnimatedShip/Ship04.png")
+			/*game->GetRenderer()->GetTexture("src/Assets/AnimatedShip/Ship01.png"),
+			game->GetRenderer()->GetTexture("src/Assets/AnimatedShip/Ship02.png"),
+			game->GetRenderer()->GetTexture("src/Assets/AnimatedShip/Ship03.png"),
+			game->GetRenderer()->GetTexture("src/Assets/AnimatedShip/Ship04.png"),*/
+			game->GetRenderer()->GetTexture("src/Assets/3DGraphics/Cube.png")
 		};
 
 		asc->SetAnimTextures(anims);
@@ -63,7 +64,7 @@ namespace Engine
 			return;
 		}
 
-		for (auto ast : GetGame()->GetAsteroids())
+		/*for (auto ast : GetGame()->GetAsteroids())
 		{
 			if (CircleComponent::Intersect(*m_Circle, *(ast->GetCircle())))
 			{
@@ -73,18 +74,18 @@ namespace Engine
 				ast->SetState(EDead);
 				break;
 			}
-		}
+		}*/
 	}
 
 	void Ship::ActorInput(const uint8_t* keyState)
 	{
-		if (keyState[SDL_SCANCODE_SPACE] && m_LaserCooldown <= 0.0f)
+		/*if (keyState[SDL_SCANCODE_SPACE] && m_LaserCooldown <= 0.0f)
 		{
 			Laser* laser = new Laser(GetGame());
 			laser->SetPosition(GetPosition());
 			laser->SetRotation(GetRotation());
 
 			m_LaserCooldown = 0.5f;
-		}
+		}*/
 	}
 }

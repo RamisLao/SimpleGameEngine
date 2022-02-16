@@ -76,7 +76,7 @@ namespace Engine
 			m_RecomputeWorldTransform = false;
 			m_WorldTransform = Matrix4::CreateScale(m_Scale);
 			m_WorldTransform *= Matrix4::CreateFromQuaternion(m_Rotation);
-			m_WorldTransform *= Matrix4::CreateTranslation(Vector3(m_Position.x, m_Position.y, 0.0f));
+			m_WorldTransform *= Matrix4::CreateTranslation(m_Position);
 
 			for (auto comp : m_Components)
 			{

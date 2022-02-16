@@ -68,15 +68,15 @@ namespace Engine
 		{
 			// Is this texture already loaded?
 			std::string texName = textures[i].GetString();
-			Texture* t = renderer->GetTexture(texName);
+			std::stringstream nameStream;
+			nameStream << "src/Assets/3DGraphics/" << texName;
+			Texture* t = renderer->GetTexture(nameStream.str());
 			if (t == nullptr)
 			{
-				std::stringstream nameStream;
-				nameStream << "src/Assets/Asteroids/" << texName;
 				t = renderer->GetTexture(nameStream.str());
 				if (t == nullptr)
 				{
-					t = renderer->GetTexture("src/Assets/Asteroids/Default.png");
+					t = renderer->GetTexture("src/Assets/3DGraphics/Default.png");
 				}
 			}
 			m_Textures.emplace_back(t);
@@ -103,7 +103,7 @@ namespace Engine
 				return false;
 			}
 
-			Vector3 pos(vert[0].GetDouble(), vert[i].GetDouble(), vert[2].GetDouble());
+			Vector3 pos(vert[0].GetDouble(), vert[1].GetDouble(), vert[2].GetDouble());
 			m_Radius = CustomMath::Max(m_Radius, pos.LengthSq());
 
 			// Add the floats

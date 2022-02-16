@@ -11,6 +11,8 @@ namespace Engine
 		Actor(game)
 	{
 		m_MoveComp = new MoveComponent(this);
+		m_MoveComp->SetMass(1.0f);
+		m_MoveComp->SetMaxVelocity(500);
 	}
 
 	void CameraActor::UpdateActor(float deltaTime)
@@ -18,7 +20,7 @@ namespace Engine
 		Actor::UpdateActor(deltaTime);
 
 		Vector3 cameraPos = GetPosition();
-		Vector3 target = GetPosition() + GetForward() * 100.0f;
+		Vector3 target = GetPosition() + GetForward();// *100.0f;
 		Vector3 up = Vector3::UnitZ;
 
 		Matrix4 view = Matrix4::CreateLookAt(cameraPos, target, up);
@@ -32,19 +34,19 @@ namespace Engine
 
 		if (keys[SDL_SCANCODE_W])
 		{
-			forwardSpeed += 300.f;
+			forwardSpeed += 5000.f;
 		}
 		if (keys[SDL_SCANCODE_S])
 		{
-			forwardSpeed -= 300.f;
+			forwardSpeed -= 5000.f;
 		}
 		if (keys[SDL_SCANCODE_A])
 		{
-			angularSpeed -= CustomMath::TwoPi;
+			angularSpeed -= CustomMath::Pi;
 		}
 		if (keys[SDL_SCANCODE_D])
 		{
-			angularSpeed += CustomMath::TwoPi;
+			angularSpeed += CustomMath::Pi;
 		}
 
 		m_MoveComp->SetForwardSpeed(forwardSpeed);

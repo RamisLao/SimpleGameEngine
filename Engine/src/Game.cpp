@@ -8,6 +8,7 @@
 #include "Random.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Asteroids\Ship.h"
 #include "Texture.h"
 #include "Renderer.h"
 #include "CameraActor.h"
@@ -175,8 +176,17 @@ namespace Engine
 		Actor* a = new Actor(this);
 		a->SetPosition(Vector3(200.f, 75.f, 0.f));
 		a->SetScale(100.f);
+		Quaternion q(Vector3::UnitY, -CustomMath::PiOver2);
+		q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, CustomMath::Pi + CustomMath::Pi / 4.0f));
+		a->SetRotation(q);
 		MeshComponent* mc = new MeshComponent(a);
 		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Cube.gpmesh"));
+
+		a = new Actor(this);
+		a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
+		a->SetScale(3.0f);
+		mc = new MeshComponent(a);
+		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
 
 		m_CameraActor = new CameraActor(this);
 	}

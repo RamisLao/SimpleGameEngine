@@ -29,6 +29,8 @@ namespace Engine
 			// Create quaternion for incremental rotation
 			// Rotate about up axis
 			Quaternion inc(Vector3::UnitZ, angle);
+			// Concatenate old and new quaternion
+			rot = Quaternion::Concatenate(rot, inc);
 			m_Owner->SetRotation(rot);
 		}
 
@@ -36,18 +38,22 @@ namespace Engine
 
 		Vector3 pos = m_Owner->GetPosition();
 
-		if (m_ForwardSpeed > 0)
+		if (m_ForwardSpeed > 0 || m_ForwardSpeed)
 		{
 			Vector3 forwardSpeed = m_Owner->GetForward() * m_ForwardSpeed * deltaTime;
 			AddForce(forwardSpeed);
 		}
 
-		Vector3 acceleration = m_SumOfForces / m_Mass;
+		Vector3 acceleration;
+		if (m_Mass <= 0)
+			acceleration = Vector3::Zero;
+		else
+			acceleration = m_SumOfForces / m_Mass;
 		m_SumOfForces = Vector3::Zero;
 
 		m_Velocity += acceleration * deltaTime;
 		m_Velocity *= m_Drag;
-		if (m_Velocity.Length() >= m_MaxVelocity)
+		if (m_MaxVelocity > 0 && m_Velocity.Length() >= m_MaxVelocity)
 		{
 			m_Velocity.Normalize();
 			m_Velocity *= m_MaxVelocity;

@@ -32,6 +32,7 @@ namespace Engine
 		if (image == nullptr)
 		{
 			SDL_Log("SOIL failed to load image %s: %s", fileName.c_str(), SOIL_last_result());
+			SOIL_free_image_data(image);
 			return false;
 		}
 
