@@ -82,6 +82,9 @@ namespace Engine
 			m_Textures.emplace_back(t);
 		}
 
+		// Load specular power
+		m_SpecPower = static_cast<float>(doc["specularPower"].GetDouble());
+
 		// Load vertices
 		const rapidjson::Value& vertsJson = doc["vertices"];
 		if (!vertsJson.IsArray() || vertsJson.Size() < 1)

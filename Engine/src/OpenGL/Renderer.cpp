@@ -117,7 +117,7 @@ namespace Engine
 
 	void Renderer::Draw()
 	{
-		glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Draw Mesh Components
@@ -127,7 +127,8 @@ namespace Engine
 
 		m_MeshShader->SetActive();
 		m_MeshShader->SetMatrixUniform("uViewProj", m_View * m_Projection);
-
+		// Update light uniforms
+		SetLightUniforms(m_MeshShader);
 		for (auto mc : m_MeshComps)
 		{
 			mc->Draw(m_MeshShader);
@@ -249,7 +250,7 @@ namespace Engine
 		m_SpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
 		m_MeshShader = new Shader();
-		if (!m_MeshShader->Load("src/Shaders/BasicMesh.vert", "src/Shaders/BasicMesh.frag"))
+		if (!m_MeshShader->Load("src/Shaders/Phong.vert", "src/Shaders/Phong.frag"))
 		{
 			return false;
 		}
@@ -282,5 +283,23 @@ namespace Engine
 		};
 
 		m_SpriteVerts = new VertexArray(vertices, 4, indices, 6);
+	}
+
+	void Renderer::SetLightUniforms(Shader* shader)
+	{
+		// Camera position is from inverted view
+		Matrix4 invView = m_View;
+		invView.Invert();
+		// GetTranslation returns the first 3 components of the fourth row
+		// These correspond to the world space position of the camera
+		shader->SetVectorUniform("uCameraPos", invView.GetTranslation());
+		shader->SetVectorUniform("uAmbientLight", m_AmbientLight);
+		// Directional light
+		shader->SetVectorUniform("uDirLight.m_Direction",
+			m_DirLight.m_Direction);
+		shader->SetVectorUniform("uDirLight.m_DiffuseColor",
+			m_DirLight.m_DiffuseColor);
+		shader->SetVectorUniform("uDirLight.m_SpecColor",
+			m_DirLight.m_SpecColor);
 	}
 }

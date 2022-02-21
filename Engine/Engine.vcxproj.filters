@@ -84,6 +84,9 @@
     <ClCompile Include="src\GameObjects\Asteroids\Ship.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameObjects\PlaneActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -150,6 +153,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\GameObjects\Asteroids\Ship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\PlaneActor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -342,5 +348,7 @@
     <None Include="src\Assets\3DGraphics\Cube.gpmesh" />
     <None Include="src\Assets\3DGraphics\Plane.gpmesh" />
     <None Include="src\Assets\3DGraphics\Sphere.gpmesh" />
+    <None Include="src\Shaders\Phong.frag" />
+    <None Include="src\Shaders\Phong.vert" />
   </ItemGroup>
 </Project>

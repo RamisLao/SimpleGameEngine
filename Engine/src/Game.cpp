@@ -14,6 +14,7 @@
 #include "CameraActor.h"
 #include "MeshComponent.h"
 #include "Mesh.h"
+#include "PlaneActor.h"
 
 namespace Engine
 {
@@ -188,7 +189,64 @@ namespace Engine
 		mc = new MeshComponent(a);
 		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
 
+		// Setup floor
+		const float start = -1250.0f;
+		const float size = 250.0f;
+		for (int i = 0; i < 10; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				a = new PlaneActor(this);
+				a->SetPosition(Vector3(start + i * size, start + j * size, -100.0f));
+			}
+		}
+
+		//// Left/right walls
+		q = Quaternion(Vector3::UnitX, CustomMath::PiOver2);
+		for (int i = 0; i < 10; i++)
+		{
+			a = new PlaneActor(this);
+			a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
+			a->SetRotation(q);
+
+			a = new PlaneActor(this);
+			a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
+			a->SetRotation(q);
+		}
+
+		q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, CustomMath::PiOver2));
+
+		//// Forward/back walls
+		for (int i = 0; i < 10; i++)
+		{
+			a = new PlaneActor(this);
+			a->SetPosition(Vector3(start - size, start + i * size, 0.0f));
+			a->SetRotation(q);
+
+			a = new PlaneActor(this);
+			a->SetPosition(Vector3(-start + size, start + i * size, 0.0f));
+			a->SetRotation(q);
+		}
+
+		m_Renderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
+		DirectionalLight& dir = m_Renderer->GetDirectionalLight();
+		dir.m_Direction = Vector3(0.0f, -0.707f, -0.707f);
+		dir.m_DiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
+		dir.m_SpecColor = Vector3(0.8f, 0.8f, 0.8f);
+
 		m_CameraActor = new CameraActor(this);
+
+		// UI elements
+		a = new Actor(this);
+		a->SetPosition(Vector3(-350.0f, -350.0f, 0.0f));
+		SpriteComponent* sc = new SpriteComponent(a);
+		sc->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/HealthBar.png"));
+
+		a = new Actor(this);
+		a->SetPosition(Vector3(375.0f, -275.0f, 0.0f));
+		a->SetScale(0.75f);
+		sc = new SpriteComponent(a);
+		sc->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/Radar.png"));
 	}
 
 	void Game::UnloadData()

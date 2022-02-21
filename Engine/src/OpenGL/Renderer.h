@@ -5,6 +5,16 @@
 #include <SDL.h>
 #include "CustomMath.h"
 
+struct DirectionalLight
+{
+	// Direction of light
+	Vector3 m_Direction;
+	// Diffuse Color
+	Vector3 m_DiffuseColor;
+	// Specular Color
+	Vector3 m_SpecColor;
+};
+
 namespace Engine
 {
 	class Renderer
@@ -29,11 +39,16 @@ namespace Engine
 		class Mesh* GetMesh(const std::string& fileName);
 
 		void SetViewMatrix(const Matrix4& view) { m_View = view; }
+
+		void SetAmbientLight(const Vector3& ambient) { m_AmbientLight = ambient; }
+		DirectionalLight& GetDirectionalLight() { return m_DirLight; }
+
 		float GetScreenWidth() const { return m_ScreenWidth; }
 		float GetScreenHeight() const { return m_ScreenHeight; }
 	private:
 		bool LoadShaders();
 		void CreateSpriteVerts();
+		void SetLightUniforms(class Shader* shader);
 		
 		// Map of textures loaded
 		std::unordered_map<std::string, class Texture*> m_Textures;
@@ -60,6 +75,10 @@ namespace Engine
 		// Width/height of screen
 		float m_ScreenWidth;
 		float m_ScreenHeight;
+
+		// Lighting data
+		Vector3 m_AmbientLight;
+		DirectionalLight m_DirLight;
 
 		// Window
 		SDL_Window* m_Window;

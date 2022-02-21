@@ -17,6 +17,7 @@ namespace Engine
 		class Texture* GetTexture(size_t index);
 		const std::string& GetShaderName() const { return m_ShaderName; }
 		float GetRadius() const { return m_Radius; }
+		float GetSpecPower() const { return m_SpecPower; }
 	private:
 		// Textures associated with this mesh
 		std::vector<class Texture*> m_Textures;
@@ -26,5 +27,7 @@ namespace Engine
 		std::string m_ShaderName;
 		// Stores object space bounding sphere radius
 		float m_Radius;
+		// Specular power of the surface
+		float m_SpecPower;
 	};
 }

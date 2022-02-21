@@ -29,6 +29,8 @@ namespace Engine
 		{
 			shader->SetMatrixUniform("uWorldTransform",
 				m_Owner->GetWorldTransform());
+			// Set Specular power
+			shader->SetFloatUniform("uSpecPower", m_Mesh->GetSpecPower());
 
 			Texture* t = m_Mesh->GetTexture(m_TextureIndex);
 			if (t)

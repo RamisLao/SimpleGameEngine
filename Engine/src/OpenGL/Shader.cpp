@@ -69,6 +69,18 @@ namespace Engine
 		);
 	}
 
+	void Shader::SetVectorUniform(const char* name, const Vector3& vector)
+	{
+		GLuint loc = glGetUniformLocation(m_ShaderProgram, name);
+		glUniform3fv(loc, 1, vector.GetAsFloatPtr());
+	}
+
+	void Shader::SetFloatUniform(const char* name, float value)
+	{
+		GLuint loc = glGetUniformLocation(m_ShaderProgram, name);
+		glUniform1f(loc, value);
+	}
+
 	bool Shader::CompileShader(const std::string& fileName, GLenum shaderType, GLuint& outShader)
 	{
 		// Open file
