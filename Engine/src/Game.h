@@ -6,6 +6,7 @@
 #include <vector>
 #include <ostream>
 #include "CustomMath.h"
+#include "SoundEvent.h"
 
 namespace Engine
 {
@@ -22,6 +23,7 @@ namespace Engine
 		void RemoveActor(class Actor* actor);
 
 		class Renderer* GetRenderer() { return m_Renderer; }
+		class AudioSystem* GetAudioSystem() { return m_AudioSystem; }
 	private:
 		void ProcessInput();
 		void UpdateGame();
@@ -33,6 +35,7 @@ namespace Engine
 		Uint32 m_TicksCount;
 
 		class Renderer* m_Renderer;
+		class AudioSystem* m_AudioSystem;
 
 		std::vector<class Actor*> m_Actors;
 		std::vector<class Actor*> m_PendingActors;
@@ -41,5 +44,6 @@ namespace Engine
 
 		// Game-specific code
 		class CameraActor* m_CameraActor;
+		SoundEvent m_MusicEvent;
 	};
 }

@@ -15,6 +15,7 @@
 #include "MeshComponent.h"
 #include "Mesh.h"
 #include "PlaneActor.h"
+#include "AudioSystem.h"
 
 namespace Engine
 {
@@ -45,6 +46,17 @@ namespace Engine
 			return false;
 		}
 
+		// Create the audio system
+		m_AudioSystem = new AudioSystem(this);
+		if (!m_AudioSystem->Initialize())
+		{
+			SDL_Log("Failed to initialize audio system");
+			m_AudioSystem->Shutdown();
+			delete m_AudioSystem;
+			m_AudioSystem = nullptr;
+			return false;
+		}
+
 		LoadData();
 
 		m_TicksCount = SDL_GetTicks();
@@ -58,6 +70,10 @@ namespace Engine
 		if (m_Renderer)
 		{
 			m_Renderer->Shutdown();
+		}
+		if (m_AudioSystem)
+		{
+			m_AudioSystem->Shutdown();
 		}
 		SDL_Quit();
 	}
@@ -164,6 +180,9 @@ namespace Engine
 		{
 			delete actor;
 		}
+
+		// Update audio system
+		m_AudioSystem->Update(deltaTime);
 	}
 
 	void Game::GenerateOutput()
@@ -247,6 +266,8 @@ namespace Engine
 		a->SetScale(0.75f);
 		sc = new SpriteComponent(a);
 		sc->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/Radar.png"));
+
+		m_MusicEvent = m_AudioSystem->PlayEvent("event:/Music");
 	}
 
 	void Game::UnloadData()

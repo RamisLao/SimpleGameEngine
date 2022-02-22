@@ -4,6 +4,7 @@
 #include "SDL_scancode.h"
 #include "Renderer.h"
 #include "Game.h"
+#include "AudioSystem.h"
 
 namespace Engine
 {
@@ -12,7 +13,7 @@ namespace Engine
 	{
 		m_MoveComp = new MoveComponent(this);
 		m_MoveComp->SetMass(1.0f);
-		m_MoveComp->SetMaxVelocity(500);
+		m_MoveComp->SetMaxVelocity(1000);
 	}
 
 	void CameraActor::UpdateActor(float deltaTime)
@@ -20,11 +21,12 @@ namespace Engine
 		Actor::UpdateActor(deltaTime);
 
 		Vector3 cameraPos = GetPosition();
-		Vector3 target = GetPosition() + GetForward();// *100.0f;
+		Vector3 target = GetPosition() + GetForward() * 10.0f;
 		Vector3 up = Vector3::UnitZ;
 
 		Matrix4 view = Matrix4::CreateLookAt(cameraPos, target, up);
 		GetGame()->GetRenderer()->SetViewMatrix(view);
+		GetGame()->GetAudioSystem()->SetListener(view);
 	}
 
 	void CameraActor::ActorInput(const uint8_t* keys)
