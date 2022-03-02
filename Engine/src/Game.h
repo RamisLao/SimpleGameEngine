@@ -45,6 +45,7 @@ namespace Engine
 
 		// Game-specific code
 		class CameraActor* m_CameraActor;
+		class Camera3rdP* m_Camera3rdP;
 		SoundEvent m_MusicEvent;
 		SoundEvent m_ReverbSnap;
 	};

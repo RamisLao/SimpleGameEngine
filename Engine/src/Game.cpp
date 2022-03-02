@@ -17,6 +17,7 @@
 #include "PlaneActor.h"
 #include "AudioSystem.h"
 #include "AudioComponent.h"
+#include "Camera3rdP.h"
 
 namespace Engine
 {
@@ -315,7 +316,8 @@ namespace Engine
 		dir.m_DiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
 		dir.m_SpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
-		m_CameraActor = new CameraActor(this);
+		//m_CameraActor = new CameraActor(this);
+		m_Camera3rdP = new Camera3rdP(this);
 
 		// UI elements
 		a = new Actor(this);
