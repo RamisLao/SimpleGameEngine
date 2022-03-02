@@ -40,6 +40,11 @@ namespace Engine
 
 		// For positional audio
 		void SetListener(const Matrix4& viewMatrix);
+		// Control buses
+		float GetBusVolume(const std::string& name) const;
+		bool GetBusPaused(const std::string& name) const;
+		void SetBusVolume(const std::string& name, float volume);
+		void SetBusPaused(const std::string& name, bool pause);
 	protected:
 		friend class SoundEvent;
 		FMOD::Studio::EventInstance* GetEventInstance(unsigned int id);
@@ -59,6 +64,8 @@ namespace Engine
 		std::unordered_map<std::string, FMOD::Studio::EventDescription*> m_Events;
 		// Map of event id to EventInstance
 		std::unordered_map<unsigned int, FMOD::Studio::EventInstance*> m_EventInstances;
+		// Map of buses
+		std::unordered_map<std::string, FMOD::Studio::Bus*> m_Buses;
 
 		// FMOD studio system
 		FMOD::Studio::System* m_System;

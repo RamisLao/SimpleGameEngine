@@ -26,6 +26,7 @@ namespace Engine
 		class AudioSystem* GetAudioSystem() { return m_AudioSystem; }
 	private:
 		void ProcessInput();
+		void HandleKeyPress(int key);
 		void UpdateGame();
 		void GenerateOutput();
 		void LoadData();
@@ -45,5 +46,6 @@ namespace Engine
 		// Game-specific code
 		class CameraActor* m_CameraActor;
 		SoundEvent m_MusicEvent;
+		SoundEvent m_ReverbSnap;
 	};
 }

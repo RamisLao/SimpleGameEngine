@@ -133,6 +133,46 @@ namespace Engine
 		m_System->setListenerAttributes(0, &listener);
 	}
 
+	float AudioSystem::GetBusVolume(const std::string& name) const
+	{
+		float retVal = 0.0f;
+		const auto iter = m_Buses.find(name);
+		if (iter != m_Buses.end())
+		{
+			iter->second->getVolume(&retVal);
+		}
+		return retVal;
+	}
+
+	bool AudioSystem::GetBusPaused(const std::string& name) const
+	{
+		bool retVal = false;
+		const auto iter = m_Buses.find(name);
+		if (iter != m_Buses.end())
+		{
+			iter->second->getPaused(&retVal);
+		}
+		return retVal;
+	}
+
+	void AudioSystem::SetBusVolume(const std::string& name, float volume)
+	{
+		auto iter = m_Buses.find(name);
+		if (iter != m_Buses.end())
+		{
+			iter->second->setVolume(volume);
+		}
+	}
+
+	void AudioSystem::SetBusPaused(const std::string& name, bool pause)
+	{
+		auto iter = m_Buses.find(name);
+		if (iter != m_Buses.end())
+		{
+			iter->second->setPaused(pause);
+		}
+	}
+
 	FMOD::Studio::EventInstance* AudioSystem::GetEventInstance(unsigned int id)
 	{
 		FMOD::Studio::EventInstance* event = nullptr;
@@ -185,6 +225,25 @@ namespace Engine
 					m_Events.emplace(eventName, e);
 				}
 			}
+
+			// Get the number of buses in this bank
+			int numBuses = 0;
+			bank->getBusCount(&numBuses);
+			if (numBuses > 0)
+			{
+				// Get list of buses in this bank
+				std::vector<FMOD::Studio::Bus*> buses(numBuses);
+				bank->getBusList(buses.data(), numBuses, &numBuses);
+				char busName[512];
+				for (int i = 0; i < numBuses; i++)
+				{
+					FMOD::Studio::Bus* bus = buses[i];
+					// Get the path of this bus (like bus:/SFX)
+					bus->getPath(busName, 512, nullptr);
+					// Add to buses map
+					m_Buses.emplace(busName, bus);
+				}
+			}
 		}
 	}
 
@@ -218,6 +277,28 @@ namespace Engine
 				if (eventi != m_Events.end())
 				{
 					m_Events.erase(eventi);
+				}
+			}
+		}
+		// Get the number of buses in this bank
+		int numBuses = 0;
+		bank->getBusCount(&numBuses);
+		if (numBuses > 0)
+		{
+			// Get list of buses in this bank
+			std::vector<FMOD::Studio::Bus*> buses(numBuses);
+			bank->getBusList(buses.data(), numBuses, &numBuses);
+			char busName[512];
+			for (int i = 0; i < numBuses; i++)
+			{
+				FMOD::Studio::Bus* bus = buses[i];
+				// Get the path of this bus (like bus:/SFX)
+				bus->getPath(busName, 512, nullptr);
+				// Remove this bus
+				auto busi = m_Buses.find(busName);
+				if (busi != m_Buses.end())
+				{
+					m_Buses.erase(busi);
 				}
 			}
 		}

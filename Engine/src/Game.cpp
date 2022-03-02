@@ -16,6 +16,7 @@
 #include "Mesh.h"
 #include "PlaneActor.h"
 #include "AudioSystem.h"
+#include "AudioComponent.h"
 
 namespace Engine
 {
@@ -120,6 +121,15 @@ namespace Engine
 			case SDL_QUIT:
 				m_IsRunning = false;
 				break;
+			// This fires when a key's initially pressed
+			case SDL_KEYDOWN:
+				if (!event.key.repeat)
+				{
+					HandleKeyPress(event.key.keysym.sym);
+				}
+				break;
+			default:
+				break;
 			}
 		}
 
@@ -136,6 +146,58 @@ namespace Engine
 			actor->ProcessInput(state);
 		}
 		m_UpdatingActors = false;
+	}
+
+	void Game::HandleKeyPress(int key)
+	{
+		switch (key)
+		{
+		case '-':
+		{
+			// Reduce master volume
+			float volume = m_AudioSystem->GetBusVolume("bus:/");
+			volume = CustomMath::Max(0.0f, volume - 0.1f);
+			m_AudioSystem->SetBusVolume("bus:/", volume);
+			break;
+		}
+		case '=':
+		{
+			// Increase master volume
+			float volume = m_AudioSystem->GetBusVolume("bus:/");
+			volume = CustomMath::Min(1.0f, volume + 0.1f);
+			m_AudioSystem->SetBusVolume("bus:/", volume);
+			break;
+		}
+		case 'e':
+			// Play explosion
+			m_AudioSystem->PlayEvent("event:/Explosion2D");
+			break;
+		case 'm':
+			// Toggle music pause state
+			m_MusicEvent.SetPaused(!m_MusicEvent.GetPaused());
+			break;
+		case 'r':
+			// Stop or start reverb snapshot
+			if (!m_ReverbSnap.IsValid())
+			{
+				m_ReverbSnap = m_AudioSystem->PlayEvent("snapshot:/WithReverb");
+			}
+			else
+			{
+				m_ReverbSnap.Stop();
+			}
+			break;
+		case '1':
+			// Set default footstep surface
+			m_CameraActor->SetFootstepSurface(0.0f);
+			break;
+		case '2':
+			// Set grass footstep surface
+			m_CameraActor->SetFootstepSurface(0.5f);
+			break;
+		default:
+			break;
+		}
 	}
 
 	void Game::UpdateGame()
@@ -235,7 +297,7 @@ namespace Engine
 
 		q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, CustomMath::PiOver2));
 
-		//// Forward/back walls
+		////// Forward/back walls
 		for (int i = 0; i < 10; i++)
 		{
 			a = new PlaneActor(this);
@@ -266,6 +328,15 @@ namespace Engine
 		a->SetScale(0.75f);
 		sc = new SpriteComponent(a);
 		sc->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/Radar.png"));
+
+		// Create spheres with audio components playing different sounds
+		a = new Actor(this);
+		a->SetPosition(Vector3(500.0f, -75.0f, 0.0f));
+		a->SetScale(1.0f);
+		mc = new MeshComponent(a);
+		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
+		AudioComponent* ac = new AudioComponent(a);
+		ac->PlayEvent("event:/FireLoop");
 
 		m_MusicEvent = m_AudioSystem->PlayEvent("event:/Music");
 	}

@@ -15,6 +15,8 @@ namespace Engine
 		void AddForce(Vector3& force);
 		void ResetVelocity() { m_Velocity = Vector3::Zero; }
 
+		float GetForwardSpeed() const { return m_ForwardSpeed; }
+
 		void SetScreenWrap(bool screenWrap) { m_ScreenWrap = screenWrap; }
 		void SetAngularSpeed(float speed) { m_AngularSpeed = speed; }
 		void SetForwardSpeed(float speed) { m_ForwardSpeed = speed; }
