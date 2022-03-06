@@ -61,7 +61,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\OpenGL;src\Audio;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include;$(SolutionDir)$(ProjectName)\vendor\GLEW\include;$(SolutionDir)$(ProjectName)\vendor\soil\include;$(SolutionDir)$(ProjectName)\vendor\rapidjson\include;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Input;src\OpenGL;src\Audio;src\Components;src\GameObjects;src\Helpers;$(SolutionDir)$(ProjectName)\vendor\SDL\include;$(SolutionDir)$(ProjectName)\vendor\GLEW\include;$(SolutionDir)$(ProjectName)\vendor\soil\include;$(SolutionDir)$(ProjectName)\vendor\rapidjson\include;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -113,6 +113,7 @@
     <ClCompile Include="src\GameObjects\Camera3rdP.cpp" />
     <ClCompile Include="src\GameObjects\PlaneActor.cpp" />
     <ClCompile Include="src\Helpers\Random.cpp" />
+    <ClCompile Include="src\Input\InputSystem.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Helpers\CustomMath.cpp" />
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="src\Helpers\CustomMath.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Helpers\Random.h" />
+    <ClInclude Include="src\Input\InputSystem.h" />
     <ClInclude Include="src\OpenGL\Mesh.h" />
     <ClInclude Include="src\OpenGL\Renderer.h" />
     <ClInclude Include="src\OpenGL\Shader.h" />

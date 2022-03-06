@@ -18,6 +18,7 @@
 #include "AudioSystem.h"
 #include "AudioComponent.h"
 #include "Camera3rdP.h"
+#include "InputSystem.h"
 
 namespace Engine
 {
@@ -33,7 +34,7 @@ namespace Engine
 
 	bool Game::Initialize()
 	{
-		if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0)
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) != 0)
 		{
 			SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 			return false;
@@ -56,6 +57,13 @@ namespace Engine
 			m_AudioSystem->Shutdown();
 			delete m_AudioSystem;
 			m_AudioSystem = nullptr;
+			return false;
+		}
+
+		m_InputSystem = new InputSystem();
+		if (!m_InputSystem->Initialize())
+		{
+			SDL_Log("Failed to initialize input system");
 			return false;
 		}
 
@@ -113,8 +121,9 @@ namespace Engine
 
 	void Game::ProcessInput()
 	{
-		SDL_Event event;
+		m_InputSystem->PrepareForUpdate();
 
+		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
 			switch (event.type)
@@ -129,14 +138,18 @@ namespace Engine
 					HandleKeyPress(event.key.keysym.sym);
 				}
 				break;
+			case SDL_MOUSEWHEEL:
+				m_InputSystem->ProcessEvent(event);
+				break;
 			default:
 				break;
 			}
 		}
 
-		const Uint8* state = SDL_GetKeyboardState(NULL);
+		m_InputSystem->Update();
+		const InputState& state = m_InputSystem->GetState();
 
-		if (state[SDL_SCANCODE_ESCAPE])
+		if (state.Keyboard.GetKeyState(SDL_SCANCODE_ESCAPE) == EReleased)
 		{
 			m_IsRunning = false;
 		}

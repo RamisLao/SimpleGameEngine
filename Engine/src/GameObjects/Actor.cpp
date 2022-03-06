@@ -52,20 +52,21 @@ namespace Engine
 	{
 	}
 
-	void Actor::ProcessInput(const uint8_t* keyState)
+	void Actor::ProcessInput(const struct InputState& state)
 	{
-		if (m_State == EActive || m_State == EInvisible)
+		if (m_State == EActive)
 		{
+			// First process input for components
 			for (auto comp : m_Components)
 			{
-				comp->ProcessInput(keyState);
+				comp->ProcessInput(state);
 			}
 
-			ActorInput(keyState);
+			ActorInput(state);
 		}
 	}
 
-	void Actor::ActorInput(const uint8_t* keyState)
+	void Actor::ActorInput(const struct InputState& state)
 	{
 	}
 

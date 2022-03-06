@@ -37,6 +37,7 @@ namespace Engine
 
 		class Renderer* m_Renderer;
 		class AudioSystem* m_AudioSystem;
+		class InputSystem* m_InputSystem;
 
 		std::vector<class Actor*> m_Actors;
 		std::vector<class Actor*> m_PendingActors;
