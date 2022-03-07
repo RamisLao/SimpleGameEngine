@@ -77,7 +77,7 @@ namespace Engine
 		}*/
 	}
 
-	void Ship::ActorInput(const uint8_t* keyState)
+	void Ship::ActorInput(const struct InputState& state)
 	{
 		/*if (keyState[SDL_SCANCODE_SPACE] && m_LaserCooldown <= 0.0f)
 		{

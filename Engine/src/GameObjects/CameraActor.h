@@ -10,11 +10,10 @@ namespace Engine
 		CameraActor(class Game* game);
 
 		void UpdateActor(float deltaTime) override;
-		void ActorInput(const uint8_t* keys) override;
 
 		void SetFootstepSurface(float value);
 	private:
-		class MoveComponent* m_MoveComp;
+		class InputComponent* m_InputComp;
 		class AudioComponent* m_AudioComp;
 		SoundEvent m_Footstep;
 		float m_LastFootstep;

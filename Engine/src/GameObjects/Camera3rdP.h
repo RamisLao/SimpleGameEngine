@@ -10,7 +10,7 @@ namespace Engine
 		Camera3rdP(class Game* game);
 
 		void UpdateActor(float deltaTime) override;
-		void ActorInput(const uint8_t* keys) override;
+		void ActorInput(const struct InputState& state) override;
 
 		void SetFootstepSurface(float value);
 		const Vector3& GetCameraPosition() const { return m_CameraPos; }

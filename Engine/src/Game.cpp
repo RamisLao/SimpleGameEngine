@@ -67,6 +67,7 @@ namespace Engine
 			return false;
 		}
 
+		SDL_GameControllerAddMappingsFromFile("src/Assets/gamecontrollerdb.txt");
 		LoadData();
 
 		m_TicksCount = SDL_GetTicks();
@@ -148,6 +149,18 @@ namespace Engine
 
 		m_InputSystem->Update();
 		const InputState& state = m_InputSystem->GetState();
+
+		std::cout << state.Controller.GetIsConnected() << std::endl;
+
+		if (state.Controller.GetButtonState(SDL_CONTROLLER_BUTTON_A) == EPressed)
+		{
+			m_AudioSystem->PlayEvent("event:/Explosion2D");
+		}
+
+		if (state.Mouse.GetButtonState(SDL_BUTTON_LEFT) == EPressed)
+		{
+			m_AudioSystem->PlayEvent("event:/Explosion2D");
+		}
 
 		if (state.Keyboard.GetKeyState(SDL_SCANCODE_ESCAPE) == EReleased)
 		{
@@ -329,8 +342,8 @@ namespace Engine
 		dir.m_DiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
 		dir.m_SpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
-		//m_CameraActor = new CameraActor(this);
-		m_Camera3rdP = new Camera3rdP(this);
+		m_CameraActor = new CameraActor(this);
+		//m_Camera3rdP = new Camera3rdP(this);
 
 		// UI elements
 		a = new Actor(this);

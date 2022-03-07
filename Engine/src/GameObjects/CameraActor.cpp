@@ -1,6 +1,7 @@
 
 #include "CameraActor.h"
 #include "MoveComponent.h"
+#include "InputComponent.h"
 #include "SDL_scancode.h"
 #include "Renderer.h"
 #include "Game.h"
@@ -12,9 +13,15 @@ namespace Engine
 	CameraActor::CameraActor(Game* game) :
 		Actor(game)
 	{
-		m_MoveComp = new MoveComponent(this);
-		m_MoveComp->SetMass(1.0f);
-		m_MoveComp->SetMaxVelocity(10000);
+		m_InputComp = new InputComponent(this);
+		m_InputComp->SetMass(1.0f);
+		m_InputComp->SetMaxVelocity(200);
+		m_InputComp->SetForwardForce(1000);
+		m_InputComp->SetAngularForce(CustomMath::Pi);
+		m_InputComp->SetForwardKey(SDL_SCANCODE_W);
+		m_InputComp->SetBackKey(SDL_SCANCODE_S);
+		m_InputComp->SetClockwiseKey(SDL_SCANCODE_D);
+		m_InputComp->SetCounterClockwiseKey(SDL_SCANCODE_A);
 		m_AudioComp = new AudioComponent(this);
 		m_LastFootstep = 0.0f;
 		m_Footstep = m_AudioComp->PlayEvent("event:/Footstep");
@@ -27,7 +34,7 @@ namespace Engine
 
 		// Play the footstep if we're moving and haven't recently
 		m_LastFootstep -= deltaTime;
-		if (!CustomMath::NearZero(m_MoveComp->GetForwardSpeed()) && m_LastFootstep <= 0.0f)
+		if (!CustomMath::NearZero(m_InputComp->GetForwardSpeed()) && m_LastFootstep <= 0.0f)
 		{
 			m_Footstep.SetPaused(false);
 			m_Footstep.Restart();
@@ -41,32 +48,6 @@ namespace Engine
 		Matrix4 view = Matrix4::CreateLookAt(cameraPos, target, up);
 		GetGame()->GetRenderer()->SetViewMatrix(view);
 		GetGame()->GetAudioSystem()->SetListener(view);
-	}
-
-	void CameraActor::ActorInput(const uint8_t* keys)
-	{
-		float forwardSpeed = 0.0f;
-		float angularSpeed = 0.0f;
-
-		if (keys[SDL_SCANCODE_W])
-		{
-			forwardSpeed += 50000.f;
-		}
-		if (keys[SDL_SCANCODE_S])
-		{
-			forwardSpeed -= 50000.f;
-		}
-		if (keys[SDL_SCANCODE_A])
-		{
-			angularSpeed -= CustomMath::Pi;
-		}
-		if (keys[SDL_SCANCODE_D])
-		{
-			angularSpeed += CustomMath::Pi;
-		}
-
-		m_MoveComp->SetForwardSpeed(forwardSpeed);
-		m_MoveComp->SetAngularSpeed(angularSpeed);
 	}
 
 	void CameraActor::SetFootstepSurface(float value)

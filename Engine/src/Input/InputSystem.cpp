@@ -19,6 +19,8 @@ namespace Engine
 		m_State.Mouse.m_CurrButtons = 0;
 		m_State.Mouse.m_PrevButtons = 0;
 
+		// Get the connected controller, if it exists
+		m_Controller = SDL_GameControllerOpen(0);
 		// Initialize controller state
 		m_State.Controller.m_IsConnected = (m_Controller != nullptr);
 		memset(m_State.Controller.m_CurrButtons, 0,

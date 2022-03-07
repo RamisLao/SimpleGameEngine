@@ -54,30 +54,30 @@ namespace Engine
 		GetGame()->GetAudioSystem()->SetListener(view);
 	}
 
-	void Camera3rdP::ActorInput(const uint8_t* keys)
+	void Camera3rdP::ActorInput(const struct InputState& state)
 	{
-		float forwardSpeed = 0.0f;
-		float angularSpeed = 0.0f;
-		// wasd movement
-		if (keys[SDL_SCANCODE_W])
-		{
-			forwardSpeed += 50000.0f;
-		}
-		if (keys[SDL_SCANCODE_S])
-		{
-			forwardSpeed -= 50000.0f;
-		}
-		if (keys[SDL_SCANCODE_A])
-		{
-			angularSpeed -= CustomMath::TwoPi;
-		}
-		if (keys[SDL_SCANCODE_D])
-		{
-			angularSpeed += CustomMath::TwoPi;
-		}
+		//float forwardSpeed = 0.0f;
+		//float angularSpeed = 0.0f;
+		//// wasd movement
+		//if (keys[SDL_SCANCODE_W])
+		//{
+		//	forwardSpeed += 50000.0f;
+		//}
+		//if (keys[SDL_SCANCODE_S])
+		//{
+		//	forwardSpeed -= 50000.0f;
+		//}
+		//if (keys[SDL_SCANCODE_A])
+		//{
+		//	angularSpeed -= CustomMath::TwoPi;
+		//}
+		//if (keys[SDL_SCANCODE_D])
+		//{
+		//	angularSpeed += CustomMath::TwoPi;
+		//}
 
-		m_MoveComp->SetForwardSpeed(forwardSpeed);
-		m_MoveComp->SetAngularSpeed(angularSpeed);
+		//m_MoveComp->SetForwardSpeed(forwardSpeed);
+		//m_MoveComp->SetAngularSpeed(angularSpeed);
 	}
 
 	void Camera3rdP::SetFootstepSurface(float value)
