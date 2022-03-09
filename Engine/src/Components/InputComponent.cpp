@@ -36,12 +36,14 @@ namespace Engine
 		if (state.Keyboard.GetKeyState(m_ClockwiseKey) == EPressed ||
 			state.Keyboard.GetKeyState(m_ClockwiseKey) == EHeld)
 		{
-			angularSpeed += m_AngularForce;
+			Vector3 force = m_Owner->GetRight() * m_StrafeForce;
+			AddForce(force);
 		}
 		if (state.Keyboard.GetKeyState(m_CounterClockwiseKey) == EPressed ||
 			state.Keyboard.GetKeyState(m_CounterClockwiseKey) == EHeld)
 		{
-			angularSpeed -= m_AngularForce;
+			Vector3 force = m_Owner->GetRight() * -1 * m_StrafeForce;
+			AddForce(force);
 		}
 		SetAngularSpeed(angularSpeed);
 	}

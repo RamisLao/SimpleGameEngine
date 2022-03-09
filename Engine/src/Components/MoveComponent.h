@@ -16,10 +16,12 @@ namespace Engine
 		void ResetVelocity() { m_Velocity = Vector3::Zero; }
 
 		float GetForwardSpeed() const { return m_ForwardSpeed; }
+		float GetStrafeSpeed() const { return m_StrafeSpeed; }
 
 		void SetScreenWrap(bool screenWrap) { m_ScreenWrap = screenWrap; }
 		void SetAngularSpeed(float speed) { m_AngularSpeed = speed; }
 		void SetForwardSpeed(float speed) { m_ForwardSpeed = speed; }
+		void SetStrafeSpeed(float speed) { m_StrafeSpeed = speed; }
 		void SetStatic(bool staticBool) { m_Static = staticBool; }
 		void SetMass(float mass) { m_Mass = mass; }
 		void SetDrag(float drag) { m_Drag = drag; }
@@ -29,6 +31,7 @@ namespace Engine
 		// Controls rotation (radians / second)
 		float m_AngularSpeed;
 		float m_ForwardSpeed;
+		float m_StrafeSpeed;
 		// If m_Static is true, the object can only rotate but not move
 		bool m_Static;
 		float m_Mass;

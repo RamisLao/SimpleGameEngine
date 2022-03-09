@@ -66,6 +66,7 @@ namespace Engine
 			SDL_Log("Failed to initialize input system");
 			return false;
 		}
+		m_InputSystem->SetRelativeMouseMode(true);
 
 		SDL_GameControllerAddMappingsFromFile("src/Assets/gamecontrollerdb.txt");
 		LoadData();
@@ -149,8 +150,6 @@ namespace Engine
 
 		m_InputSystem->Update();
 		const InputState& state = m_InputSystem->GetState();
-
-		std::cout << state.Controller.GetIsConnected() << std::endl;
 
 		if (state.Controller.GetButtonState(SDL_CONTROLLER_BUTTON_A) == EPressed)
 		{

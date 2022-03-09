@@ -38,10 +38,11 @@ namespace Engine
 
 		Vector3 pos = m_Owner->GetPosition();
 
-		if (m_ForwardSpeed > 0 || m_ForwardSpeed)
+		if (m_ForwardSpeed != 0 || m_StrafeSpeed != 0)
 		{
-			Vector3 forwardSpeed = m_Owner->GetForward() * m_ForwardSpeed * deltaTime;
-			AddForce(forwardSpeed);
+			Vector3 movementSpeed = m_Owner->GetForward() * m_ForwardSpeed * deltaTime;
+			movementSpeed += m_Owner->GetRight() * m_StrafeSpeed * deltaTime;
+			AddForce(movementSpeed);
 		}
 
 		Vector3 acceleration;

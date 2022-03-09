@@ -17,6 +17,7 @@ namespace Engine
 		m_InputComp->SetMass(1.0f);
 		m_InputComp->SetMaxVelocity(200);
 		m_InputComp->SetForwardForce(1000);
+		m_InputComp->SetStrafeForce(1000);
 		m_InputComp->SetAngularForce(CustomMath::Pi);
 		m_InputComp->SetForwardKey(SDL_SCANCODE_W);
 		m_InputComp->SetBackKey(SDL_SCANCODE_S);
