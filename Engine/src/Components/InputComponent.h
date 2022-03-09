@@ -28,11 +28,13 @@ namespace Engine
 		void SetBackKey(SDL_Scancode key) { m_BackKey = key; }
 		void SetClockwiseKey(SDL_Scancode key) { m_ClockwiseKey = key; }
 		void SetCounterClockwiseKey(SDL_Scancode key) { m_CounterClockwiseKey = key; }
+		void SetUseAngularForce(bool use) { m_UseAngularForce = use; }
 	private:
 		// The maximum forward/angular speeds
 		float m_ForwardForce;
 		float m_AngularForce;
 		float m_StrafeForce;
+		bool m_UseAngularForce;
 		// Keys for forward/back movement
 		SDL_Scancode m_ForwardKey;
 		SDL_Scancode m_BackKey;

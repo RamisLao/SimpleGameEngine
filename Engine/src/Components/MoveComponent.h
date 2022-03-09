@@ -17,6 +17,7 @@ namespace Engine
 
 		float GetForwardSpeed() const { return m_ForwardSpeed; }
 		float GetStrafeSpeed() const { return m_StrafeSpeed; }
+		float GetCurrentVelocityLength() const { return m_Velocity.Length(); }
 
 		void SetScreenWrap(bool screenWrap) { m_ScreenWrap = screenWrap; }
 		void SetAngularSpeed(float speed) { m_AngularSpeed = speed; }

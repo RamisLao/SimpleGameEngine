@@ -131,7 +131,7 @@ namespace Engine
 		SetLightUniforms(m_MeshShader);
 		for (auto mc : m_MeshComps)
 		{
-			mc->Draw(m_MeshShader);
+			if (mc->GetVisible()) mc->Draw(m_MeshShader);
 		}
 
 		// Draw all Sprite Components

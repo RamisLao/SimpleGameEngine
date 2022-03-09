@@ -16,7 +16,7 @@ namespace Engine
 
 		void SetVisible(bool visible);
 	private:
-		class MoveComponent* m_MoveComp;
+		class InputComponent* m_InputComp;
 		class AudioComponent* m_AudioComp;
 		class MeshComponent* m_MeshComp;
 		class FPSCamera* m_CameraComp;

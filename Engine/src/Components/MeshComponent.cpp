@@ -13,7 +13,8 @@ namespace Engine
 	MeshComponent::MeshComponent(Actor* owner) :
 		Component(owner),
 		m_Mesh(nullptr),
-		m_TextureIndex(0)
+		m_TextureIndex(0),
+		m_Visible(true)
 	{
 		m_Owner->GetGame()->GetRenderer()->AddMeshComp(this);
 	}

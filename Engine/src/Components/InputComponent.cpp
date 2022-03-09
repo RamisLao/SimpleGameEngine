@@ -12,7 +12,8 @@ namespace Engine
 		m_ClockwiseKey(SDL_SCANCODE_0),
 		m_CounterClockwiseKey(SDL_SCANCODE_0),
 		m_AngularForce(0),
-		m_ForwardForce(0)
+		m_ForwardForce(0),
+		m_StrafeForce(0)
 	{
 	}
 
@@ -36,15 +37,24 @@ namespace Engine
 		if (state.Keyboard.GetKeyState(m_ClockwiseKey) == EPressed ||
 			state.Keyboard.GetKeyState(m_ClockwiseKey) == EHeld)
 		{
-			Vector3 force = m_Owner->GetRight() * m_StrafeForce;
-			AddForce(force);
+			if (m_UseAngularForce) angularSpeed += m_AngularForce;
+			else
+			{
+				Vector3 force = m_Owner->GetRight() * m_StrafeForce;
+				AddForce(force);
+			}
 		}
 		if (state.Keyboard.GetKeyState(m_CounterClockwiseKey) == EPressed ||
 			state.Keyboard.GetKeyState(m_CounterClockwiseKey) == EHeld)
 		{
-			Vector3 force = m_Owner->GetRight() * -1 * m_StrafeForce;
-			AddForce(force);
+			if (m_UseAngularForce) angularSpeed -= m_AngularForce;
+			else
+			{
+				Vector3 force = m_Owner->GetRight() * -1 * m_StrafeForce;
+				AddForce(force);
+			}
 		}
-		SetAngularSpeed(angularSpeed);
+
+		if (m_UseAngularForce) SetAngularSpeed(angularSpeed);
 	}
 }

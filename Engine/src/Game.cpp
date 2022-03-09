@@ -11,14 +11,15 @@
 #include "Asteroids\Ship.h"
 #include "Texture.h"
 #include "Renderer.h"
-#include "CameraActor.h"
 #include "MeshComponent.h"
 #include "Mesh.h"
 #include "PlaneActor.h"
 #include "AudioSystem.h"
 #include "AudioComponent.h"
-#include "Camera3rdP.h"
 #include "InputSystem.h"
+#include "FPSActor.h"
+#include "FollowActor.h"
+#include "CameraActor.h"
 
 namespace Engine
 {
@@ -215,11 +216,11 @@ namespace Engine
 			break;
 		case '1':
 			// Set default footstep surface
-			m_CameraActor->SetFootstepSurface(0.0f);
+			m_FPSActor->SetFootstepSurface(0.0f);
 			break;
 		case '2':
 			// Set grass footstep surface
-			m_CameraActor->SetFootstepSurface(0.5f);
+			m_FPSActor->SetFootstepSurface(0.5f);
 			break;
 		default:
 			break;
@@ -341,8 +342,10 @@ namespace Engine
 		dir.m_DiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
 		dir.m_SpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
-		m_CameraActor = new CameraActor(this);
-		//m_Camera3rdP = new Camera3rdP(this);
+		//m_FPSActor = new FPSActor(this);
+		m_FollowActor = new FollowActor(this);
+		//CameraActor* camera = new CameraActor(this);
+
 
 		// UI elements
 		a = new Actor(this);

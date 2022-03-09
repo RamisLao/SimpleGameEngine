@@ -45,7 +45,6 @@ namespace Engine
 
 		// Mouse
 		m_State.Mouse.m_PrevButtons = m_State.Mouse.m_CurrButtons;
-		m_State.Mouse.m_IsRelative = false;
 		// The mouse wheel event only triggers on frames where the scroll wheel moves
 		m_State.Mouse.m_ScrollWheel = Vector2::Zero;
 

@@ -45,8 +45,8 @@ namespace Engine
 		bool m_UpdatingActors;
 
 		// Game-specific code
-		class CameraActor* m_CameraActor;
-		class Camera3rdP* m_Camera3rdP;
+		class FPSActor* m_FPSActor;
+		class FollowActor* m_FollowActor;
 		SoundEvent m_MusicEvent;
 		SoundEvent m_ReverbSnap;
 	};
