@@ -20,6 +20,7 @@
 #include "FPSActor.h"
 #include "FollowActor.h"
 #include "CameraActor.h"
+#include "PhysWorld.h"
 
 namespace Engine
 {
@@ -70,6 +71,9 @@ namespace Engine
 		m_InputSystem->SetRelativeMouseMode(true);
 
 		SDL_GameControllerAddMappingsFromFile("src/Assets/gamecontrollerdb.txt");
+
+		m_PhysWorld = new PhysWorld(this);
+
 		LoadData();
 
 		m_TicksCount = SDL_GetTicks();
@@ -342,8 +346,8 @@ namespace Engine
 		dir.m_DiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
 		dir.m_SpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
-		//m_FPSActor = new FPSActor(this);
-		m_FollowActor = new FollowActor(this);
+		m_FPSActor = new FPSActor(this);
+		//m_FollowActor = new FollowActor(this);
 		//CameraActor* camera = new CameraActor(this);
 
 

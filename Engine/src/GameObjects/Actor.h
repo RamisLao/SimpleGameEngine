@@ -53,6 +53,8 @@ namespace Engine
 		Vector3 GetForward() const { return Vector3::Transform(Vector3::UnitX, m_Rotation); }
 		Vector3 GetRight() const { return Vector3::Transform(Vector3::UnitY, m_Rotation); }
 
+		void RotateToNewForward(const Vector3& forward);
+
 		State GetState() const { return m_State; }
 		void SetState(State state) { m_State = state; }
 

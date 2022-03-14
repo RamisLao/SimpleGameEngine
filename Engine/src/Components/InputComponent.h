@@ -28,7 +28,7 @@ namespace Engine
 		void SetBackKey(SDL_Scancode key) { m_BackKey = key; }
 		void SetClockwiseKey(SDL_Scancode key) { m_ClockwiseKey = key; }
 		void SetCounterClockwiseKey(SDL_Scancode key) { m_CounterClockwiseKey = key; }
-		void SetUseAngularForce(bool use) { m_UseAngularForce = use; }
+		void SetUseAngularForce(bool value) { m_UseAngularForce = value; }
 	private:
 		// The maximum forward/angular speeds
 		float m_ForwardForce;

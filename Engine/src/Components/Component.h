@@ -15,6 +15,7 @@ namespace Engine
 
 		int GetUpdateOrder() const { return m_UpdateOrder; }
 
+		class Actor* GetOwner() const { return m_Owner; }
 	protected:
 		class Actor* m_Owner;
 		int m_UpdateOrder;

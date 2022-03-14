@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "Collision.h"
 
 namespace Engine
 {
@@ -17,8 +18,10 @@ namespace Engine
 		class Texture* GetTexture(size_t index);
 		const std::string& GetShaderName() const { return m_ShaderName; }
 		float GetRadius() const { return m_Radius; }
+		const AABB& GetBox() const { return m_Box; }
 		float GetSpecPower() const { return m_SpecPower; }
 	private:
+		AABB m_Box;
 		// Textures associated with this mesh
 		std::vector<class Texture*> m_Textures;
 		// Vertex array associated with this mesh

@@ -24,6 +24,7 @@ namespace Engine
 
 		class Renderer* GetRenderer() { return m_Renderer; }
 		class AudioSystem* GetAudioSystem() { return m_AudioSystem; }
+		class PhysWorld* GetPhysWorld() { return m_PhysWorld; }
 	private:
 		void ProcessInput();
 		void HandleKeyPress(int key);
@@ -38,6 +39,7 @@ namespace Engine
 		class Renderer* m_Renderer;
 		class AudioSystem* m_AudioSystem;
 		class InputSystem* m_InputSystem;
+		class PhysWorld* m_PhysWorld;
 
 		std::vector<class Actor*> m_Actors;
 		std::vector<class Actor*> m_PendingActors;

@@ -13,7 +13,9 @@ namespace Engine
 {
 	Mesh::Mesh() :
 		m_VertexArray(nullptr),
-		m_Radius(0.0f)
+		m_Radius(0.0f),
+		m_Box(Vector3::Infinity, Vector3::NegInfinity),
+		m_SpecPower(100.0f)
 	{
 	}
 
@@ -108,6 +110,7 @@ namespace Engine
 
 			Vector3 pos(vert[0].GetDouble(), vert[1].GetDouble(), vert[2].GetDouble());
 			m_Radius = CustomMath::Max(m_Radius, pos.LengthSq());
+			m_Box.UpdateMinMax(pos);
 
 			// Add the floats
 			for (rapidjson::SizeType i = 0; i < vert.Size(); i++)

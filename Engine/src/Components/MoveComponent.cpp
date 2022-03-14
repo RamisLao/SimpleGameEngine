@@ -11,6 +11,7 @@ namespace Engine
 		Component(owner, updateOrder),
 		m_AngularSpeed(0.0f),
 		m_ForwardSpeed(0.0f),
+		m_StrafeSpeed(0.0f),
 		m_Static(false),
 		m_SumOfForces(Vector3::Zero),
 		m_Mass(1.0f),
