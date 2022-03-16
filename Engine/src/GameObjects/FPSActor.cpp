@@ -10,6 +10,9 @@
 #include "MeshComponent.h"
 #include "Mesh.h"
 #include "InputSystem.h"
+#include "BallActor.h"
+#include "BoxComponent.h"
+#include "PlaneActor.h"
 
 namespace Engine
 {
@@ -18,9 +21,9 @@ namespace Engine
 	{
 		m_InputComp = new InputComponent(this);
 		m_InputComp->SetMass(1.0f);
-		m_InputComp->SetMaxVelocity(200);
-		m_InputComp->SetForwardForce(1000);
-		m_InputComp->SetStrafeForce(1000);
+		m_InputComp->SetMaxVelocity(500);
+		m_InputComp->SetForwardForce(2000);
+		m_InputComp->SetStrafeForce(2000);
 		m_InputComp->SetAngularForce(CustomMath::Pi);
 		m_InputComp->SetForwardKey(SDL_SCANCODE_W);
 		m_InputComp->SetBackKey(SDL_SCANCODE_S);
@@ -38,11 +41,20 @@ namespace Engine
 		m_FPSModel->SetScale(0.75f);
 		m_MeshComp = new MeshComponent(m_FPSModel);
 		m_MeshComp->SetMesh(game->GetRenderer()->GetMesh("src/Assets/3DGraphics/Rifle.gpmesh"));
+
+		// Add a box component
+		m_BoxComp = new BoxComponent(this);
+		AABB myBox(Vector3(-25.0f, -25.0f, -87.5f),
+			Vector3(25.0f, 25.0f, 87.5f));
+		m_BoxComp->SetObjectBox(myBox);
+		m_BoxComp->SetShouldRotate(false);
 	}
 
 	void FPSActor::UpdateActor(float deltaTime)
 	{
 		Actor::UpdateActor(deltaTime);
+
+		FixCollisions();
 
 		// Play the footstep if we're moving and haven't recently
 		/*m_LastFootstep -= deltaTime;
@@ -97,6 +109,11 @@ namespace Engine
 			pitchSpeed *= maxPitchSpeed;
 		}
 		m_CameraComp->SetPitchSpeed(pitchSpeed);
+
+		if (state.Mouse.GetButtonState(SDL_BUTTON_LEFT) == EPressed)
+		{
+			Shoot();
+		}
 	}
 
 	void FPSActor::SetFootstepSurface(float value)
@@ -110,5 +127,74 @@ namespace Engine
 	void FPSActor::SetVisible(bool visible)
 	{
 		m_MeshComp->SetVisible(visible);
+	}
+
+	void FPSActor::Shoot()
+	{
+		Vector3 start;
+		Vector3 dir;
+		GetGame()->GetRenderer()->GetScreenDirection(start, dir);
+		// Spawn a ball
+		BallActor* ball = new BallActor(GetGame());
+		ball->SetPlayer(this);
+		ball->SetPosition(start + dir * 20.0f);
+		// Rotate the ball to face new direction
+		ball->RotateToNewForward(dir);
+		// Play shooting sound
+		m_AudioComp->PlayEvent("event:/Shot");
+	}
+
+	void FPSActor::FixCollisions()
+	{
+		// Need to recompute my world transform to update world box
+		ComputeWorldTransform();
+
+		const AABB& playerBox = m_BoxComp->GetWorldBox();
+		Vector3 pos = GetPosition();
+
+		auto& planes = GetGame()->GetPlanes();
+		for (auto pa : planes)
+		{
+			// Do we collide with this PlaneActor?
+			const AABB& planeBox = pa->GetBox()->GetWorldBox();
+			if (Intersect(playerBox, planeBox))
+			{
+				// Calculate all our differences
+				float dx1 = planeBox.m_Max.x - playerBox.m_Min.x;
+				float dx2 = planeBox.m_Min.x - playerBox.m_Max.x;
+				float dy1 = planeBox.m_Max.y - playerBox.m_Min.y;
+				float dy2 = planeBox.m_Min.y - playerBox.m_Max.y;
+				float dz1 = planeBox.m_Max.z - playerBox.m_Min.z;
+				float dz2 = planeBox.m_Min.z - playerBox.m_Max.z;
+
+				// Set dx to whichever of dx1/dx2 have a lower abs
+				float dx = CustomMath::Abs(dx1) < CustomMath::Abs(dx2) ?
+					dx1 : dx2;
+				// Ditto for dy
+				float dy = CustomMath::Abs(dy1) < CustomMath::Abs(dy2) ?
+					dy1 : dy2;
+				// Ditto for dz
+				float dz = CustomMath::Abs(dz1) < CustomMath::Abs(dz2) ?
+					dz1 : dz2;
+
+				// Whichever is closest, adjust x/y position
+				if (CustomMath::Abs(dx) <= CustomMath::Abs(dy) && CustomMath::Abs(dx) <= CustomMath::Abs(dz))
+				{
+					pos.x += dx;
+				}
+				else if (CustomMath::Abs(dy) <= CustomMath::Abs(dx) && CustomMath::Abs(dy) <= CustomMath::Abs(dz))
+				{
+					pos.y += dy;
+				}
+				else
+				{
+					pos.z += dz;
+				}
+
+				// Need to set position and update box component
+				SetPosition(pos);
+				m_BoxComp->OnUpdateWorldTransform();
+			}
+		}
 	}
 }

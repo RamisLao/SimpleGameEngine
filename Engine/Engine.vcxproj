@@ -94,12 +94,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AudioSystem.cpp" />
-    <ClCompile Include="src\Audio\AudioSystem.cpp" />
-    <ClCompile Include="src\Audio\SoundEvent.cpp" />
     <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\Components\AIState.cpp" />
     <ClCompile Include="src\Components\AIComponent.cpp" />
     <ClCompile Include="src\Components\AudioComponent.cpp" />
+    <ClCompile Include="src\Components\BallMove.cpp" />
     <ClCompile Include="src\Components\BoxComponent.cpp" />
     <ClCompile Include="src\Components\CameraComponent.cpp" />
     <ClCompile Include="src\Components\CircleComponent.cpp" />
@@ -116,33 +115,32 @@
     <ClCompile Include="src\Components\Component.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObjects\Asteroids\Ship.cpp" />
+    <ClCompile Include="src\GameObjects\BallActor.cpp" />
     <ClCompile Include="src\GameObjects\CameraActor.cpp" />
     <ClCompile Include="src\GameObjects\Camera3rdP.cpp" />
     <ClCompile Include="src\GameObjects\FollowActor.cpp" />
     <ClCompile Include="src\GameObjects\FPSActor.cpp" />
     <ClCompile Include="src\GameObjects\PlaneActor.cpp" />
-    <ClCompile Include="src\Helpers\Random.cpp" />
+    <ClCompile Include="src\GameObjects\TargetActor.cpp" />
     <ClCompile Include="src\InputSystem.cpp" />
-    <ClCompile Include="src\Input\InputSystem.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Helpers\CustomMath.cpp" />
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\OpenGL\Mesh.cpp" />
     <ClCompile Include="src\OpenGL\Renderer.cpp" />
     <ClCompile Include="src\OpenGL\Shader.cpp" />
     <ClCompile Include="src\OpenGL\Texture.cpp" />
     <ClCompile Include="src\OpenGL\VertexArray.cpp" />
+    <ClCompile Include="src\PhysWorld.cpp" />
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\SoundEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AudioSystem.h" />
-    <ClInclude Include="src\Audio\AudioSystem.h" />
-    <ClInclude Include="src\Audio\SoundEvent.h" />
     <ClInclude Include="src\Collision.h" />
     <ClInclude Include="src\Components\AIState.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
     <ClInclude Include="src\Components\AudioComponent.h" />
+    <ClInclude Include="src\Components\BallMove.h" />
     <ClInclude Include="src\Components\BoxComponent.h" />
     <ClInclude Include="src\Components\CameraComponent.h" />
     <ClInclude Include="src\Components\CircleComponent.h" />
@@ -159,21 +157,21 @@
     <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameObjects\Asteroids\Ship.h" />
+    <ClInclude Include="src\GameObjects\BallActor.h" />
     <ClInclude Include="src\GameObjects\CameraActor.h" />
     <ClInclude Include="src\GameObjects\Camera3rdP.h" />
     <ClInclude Include="src\GameObjects\FollowActor.h" />
     <ClInclude Include="src\GameObjects\FPSActor.h" />
     <ClInclude Include="src\GameObjects\PlaneActor.h" />
-    <ClInclude Include="src\Helpers\CustomMath.h" />
+    <ClInclude Include="src\GameObjects\TargetActor.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
-    <ClInclude Include="src\Helpers\Random.h" />
     <ClInclude Include="src\InputSystem.h" />
-    <ClInclude Include="src\Input\InputSystem.h" />
     <ClInclude Include="src\OpenGL\Mesh.h" />
     <ClInclude Include="src\OpenGL\Renderer.h" />
     <ClInclude Include="src\OpenGL\Shader.h" />
     <ClInclude Include="src\OpenGL\Texture.h" />
     <ClInclude Include="src\OpenGL\VertexArray.h" />
+    <ClInclude Include="src\PhysWorld.h" />
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\SoundEvent.h" />
   </ItemGroup>

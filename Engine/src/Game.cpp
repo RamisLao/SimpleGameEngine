@@ -21,6 +21,7 @@
 #include "FollowActor.h"
 #include "CameraActor.h"
 #include "PhysWorld.h"
+#include "TargetActor.h"
 
 namespace Engine
 {
@@ -126,6 +127,17 @@ namespace Engine
 		}
 	}
 
+	void Game::AddPlane(PlaneActor* plane)
+	{
+		m_Planes.emplace_back(plane);
+	}
+
+	void Game::RemovePlane(PlaneActor* plane)
+	{
+		auto iter = std::find(m_Planes.begin(), m_Planes.end(), plane);
+		m_Planes.erase(iter);
+	}
+
 	void Game::ProcessInput()
 	{
 		m_InputSystem->PrepareForUpdate();
@@ -155,16 +167,6 @@ namespace Engine
 
 		m_InputSystem->Update();
 		const InputState& state = m_InputSystem->GetState();
-
-		if (state.Controller.GetButtonState(SDL_CONTROLLER_BUTTON_A) == EPressed)
-		{
-			m_AudioSystem->PlayEvent("event:/Explosion2D");
-		}
-
-		if (state.Mouse.GetButtonState(SDL_BUTTON_LEFT) == EPressed)
-		{
-			m_AudioSystem->PlayEvent("event:/Explosion2D");
-		}
 
 		if (state.Keyboard.GetKeyState(SDL_SCANCODE_ESCAPE) == EReleased)
 		{
@@ -199,10 +201,6 @@ namespace Engine
 			m_AudioSystem->SetBusVolume("bus:/", volume);
 			break;
 		}
-		case 'e':
-			// Play explosion
-			m_AudioSystem->PlayEvent("event:/Explosion2D");
-			break;
 		case 'm':
 			// Toggle music pause state
 			m_MusicEvent.SetPaused(!m_MusicEvent.GetPaused());
@@ -217,14 +215,6 @@ namespace Engine
 			{
 				m_ReverbSnap.Stop();
 			}
-			break;
-		case '1':
-			// Set default footstep surface
-			m_FPSActor->SetFootstepSurface(0.0f);
-			break;
-		case '2':
-			// Set grass footstep surface
-			m_FPSActor->SetFootstepSurface(0.5f);
 			break;
 		default:
 			break;
@@ -353,15 +343,9 @@ namespace Engine
 
 		// UI elements
 		a = new Actor(this);
-		a->SetPosition(Vector3(-350.0f, -350.0f, 0.0f));
-		SpriteComponent* sc = new SpriteComponent(a);
-		sc->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/HealthBar.png"));
-
-		a = new Actor(this);
-		a->SetPosition(Vector3(375.0f, -275.0f, 0.0f));
-		a->SetScale(0.75f);
-		sc = new SpriteComponent(a);
-		sc->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/Radar.png"));
+		a->SetScale(2.0f);
+		m_Crosshair = new SpriteComponent(a);
+		m_Crosshair->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/Crosshair.png"));
 
 		// Create spheres with audio components playing different sounds
 		a = new Actor(this);
@@ -373,6 +357,16 @@ namespace Engine
 		ac->PlayEvent("event:/FireLoop");
 
 		m_MusicEvent = m_AudioSystem->PlayEvent("event:/Music");
+
+		// Create target actors
+		a = new TargetActor(this);
+		a->SetPosition(Vector3(1450.0f, 0.0f, 100.0f));
+		a = new TargetActor(this);
+		a->SetPosition(Vector3(1450.0f, 0.0f, 400.0f));
+		a = new TargetActor(this);
+		a->SetPosition(Vector3(1450.0f, -500.0f, 200.0f));
+		a = new TargetActor(this);
+		a->SetPosition(Vector3(1450.0f, 500.0f, 200.0f));
 	}
 
 	void Game::UnloadData()

@@ -25,6 +25,11 @@ namespace Engine
 		class Renderer* GetRenderer() { return m_Renderer; }
 		class AudioSystem* GetAudioSystem() { return m_AudioSystem; }
 		class PhysWorld* GetPhysWorld() { return m_PhysWorld; }
+
+		// Game-specific
+		void AddPlane(class PlaneActor* plane);
+		void RemovePlane(class PlaneActor* plane);
+		std::vector<class PlaneActor*>& GetPlanes() { return m_Planes; }
 	private:
 		void ProcessInput();
 		void HandleKeyPress(int key);
@@ -51,5 +56,7 @@ namespace Engine
 		class FollowActor* m_FollowActor;
 		SoundEvent m_MusicEvent;
 		SoundEvent m_ReverbSnap;
+		class SpriteComponent* m_Crosshair;
+		std::vector<class PlaneActor*> m_Planes;
 	};
 }

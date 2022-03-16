@@ -15,10 +15,14 @@ namespace Engine
 		void SetFootstepSurface(float value);
 
 		void SetVisible(bool visible);
+		void Shoot();
+
+		void FixCollisions();
 	private:
 		class InputComponent* m_InputComp;
 		class AudioComponent* m_AudioComp;
 		class MeshComponent* m_MeshComp;
+		class BoxComponent* m_BoxComp;
 		class FPSCamera* m_CameraComp;
 		class Actor* m_FPSModel;
 		SoundEvent m_Footstep;
