@@ -56,15 +56,6 @@ namespace Engine
 
 		FixCollisions();
 
-		// Play the footstep if we're moving and haven't recently
-		/*m_LastFootstep -= deltaTime;
-		if (!CustomMath::NearZero(m_MoveComp->GetForwardSpeed()) && m_LastFootstep <= 0.0f)
-		{
-			m_Footstep.SetPaused(false);
-			m_Footstep.Restart();
-			m_LastFootstep = 0.5f;
-		}*/
-
 		// Update position of FPS model relative to actor position
 		const Vector3 modelOffset(Vector3(10.0f, 10.0f, -10.0f));
 		Vector3 modelPos = GetPosition();

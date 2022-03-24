@@ -48,4 +48,4 @@ Vector3 Random::GetVector(const Vector3& min, const Vector3& max)
 	return min + (max - min) * r;
 }
 
-std::mt19937 Random::sGenerator;
+std::knuth_b Random::sGenerator;

@@ -21,7 +21,7 @@ namespace Engine
 		m_MyMove->SetForwardSpeed(400000.0f);
 		m_MyMove->SetMaxVelocity(10000);
 		m_MyMove->SetMass(0.1f);
-		m_MyMove->SetDrag(0.1f);
+		m_MyMove->SetDrag(0.7f);
 		m_AudioComp = new AudioComponent(this);
 	}
 

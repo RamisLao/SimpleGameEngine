@@ -32,5 +32,5 @@ public:
 	static Vector2 GetVector(const Vector2& min, const Vector2& max);
 	static Vector3 GetVector(const Vector3& min, const Vector3& max);
 private:
-	static std::mt19937 sGenerator;
+	static std::knuth_b sGenerator;
 };

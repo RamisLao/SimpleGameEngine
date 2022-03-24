@@ -54,6 +54,7 @@ namespace Engine
 		m_SumOfForces = Vector3::Zero;
 
 		m_Velocity += acceleration * deltaTime;
+		m_Velocity *= m_Drag;
 		if (m_MaxVelocity > 0 && m_Velocity.Length() >= m_MaxVelocity)
 		{
 			m_Velocity.Normalize();
@@ -61,7 +62,6 @@ namespace Engine
 		}
 
 		pos += m_Velocity * deltaTime;
-		m_Velocity *= m_Drag;
 
 		if (m_ScreenWrap)
 		{

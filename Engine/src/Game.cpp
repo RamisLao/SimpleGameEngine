@@ -76,6 +76,9 @@ namespace Engine
 		m_PhysWorld = new PhysWorld(this);
 
 		LoadData();
+		Random::Init();
+
+		std::cout << __cplusplus << std::endl;
 
 		m_TicksCount = SDL_GetTicks();
 
@@ -285,13 +288,13 @@ namespace Engine
 		MeshComponent* mc = new MeshComponent(a);
 		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Cube.gpmesh"));
 
-		a = new Actor(this);
-		a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
-		a->SetScale(3.0f);
-		mc = new MeshComponent(a);
-		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
+		//a = new Actor(this);
+		//a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
+		//a->SetScale(3.0f);
+		//mc = new MeshComponent(a);
+		//mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
 
-		// Setup floor
+		//// Setup floor
 		const float start = -1250.0f;
 		const float size = 250.0f;
 		for (int i = 0; i < 10; i++)
@@ -303,32 +306,32 @@ namespace Engine
 			}
 		}
 
-		//// Left/right walls
-		q = Quaternion(Vector3::UnitX, CustomMath::PiOver2);
-		for (int i = 0; i < 10; i++)
-		{
-			a = new PlaneActor(this);
-			a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
-			a->SetRotation(q);
+		////// Left/right walls
+		//q = Quaternion(Vector3::UnitX, CustomMath::PiOver2);
+		//for (int i = 0; i < 10; i++)
+		//{
+		//	a = new PlaneActor(this);
+		//	a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
+		//	a->SetRotation(q);
 
-			a = new PlaneActor(this);
-			a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
-			a->SetRotation(q);
-		}
+		//	a = new PlaneActor(this);
+		//	a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
+		//	a->SetRotation(q);
+		//}
 
-		q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, CustomMath::PiOver2));
+		//q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, CustomMath::PiOver2));
 
-		////// Forward/back walls
-		for (int i = 0; i < 10; i++)
-		{
-			a = new PlaneActor(this);
-			a->SetPosition(Vector3(start - size, start + i * size, 0.0f));
-			a->SetRotation(q);
+		//////// Forward/back walls
+		//for (int i = 0; i < 10; i++)
+		//{
+		//	a = new PlaneActor(this);
+		//	a->SetPosition(Vector3(start - size, start + i * size, 0.0f));
+		//	a->SetRotation(q);
 
-			a = new PlaneActor(this);
-			a->SetPosition(Vector3(-start + size, start + i * size, 0.0f));
-			a->SetRotation(q);
-		}
+		//	a = new PlaneActor(this);
+		//	a->SetPosition(Vector3(-start + size, start + i * size, 0.0f));
+		//	a->SetRotation(q);
+		//}
 
 		m_Renderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
 		DirectionalLight& dir = m_Renderer->GetDirectionalLight();
@@ -342,31 +345,31 @@ namespace Engine
 
 
 		// UI elements
-		a = new Actor(this);
-		a->SetScale(2.0f);
-		m_Crosshair = new SpriteComponent(a);
-		m_Crosshair->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/Crosshair.png"));
+		//a = new Actor(this);
+		//a->SetScale(2.0f);
+		//m_Crosshair = new SpriteComponent(a);
+		//m_Crosshair->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/Crosshair.png"));
 
-		// Create spheres with audio components playing different sounds
-		a = new Actor(this);
-		a->SetPosition(Vector3(500.0f, -75.0f, 0.0f));
-		a->SetScale(1.0f);
-		mc = new MeshComponent(a);
-		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
-		AudioComponent* ac = new AudioComponent(a);
-		ac->PlayEvent("event:/FireLoop");
+		//// Create spheres with audio components playing different sounds
+		//a = new Actor(this);
+		//a->SetPosition(Vector3(500.0f, -75.0f, 0.0f));
+		//a->SetScale(1.0f);
+		//mc = new MeshComponent(a);
+		//mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
+		//AudioComponent* ac = new AudioComponent(a);
+		//ac->PlayEvent("event:/FireLoop");
 
-		m_MusicEvent = m_AudioSystem->PlayEvent("event:/Music");
+		//m_MusicEvent = m_AudioSystem->PlayEvent("event:/Music");
 
-		// Create target actors
-		a = new TargetActor(this);
-		a->SetPosition(Vector3(1450.0f, 0.0f, 100.0f));
-		a = new TargetActor(this);
-		a->SetPosition(Vector3(1450.0f, 0.0f, 400.0f));
-		a = new TargetActor(this);
-		a->SetPosition(Vector3(1450.0f, -500.0f, 200.0f));
-		a = new TargetActor(this);
-		a->SetPosition(Vector3(1450.0f, 500.0f, 200.0f));
+		//// Create target actors
+		//a = new TargetActor(this);
+		//a->SetPosition(Vector3(1450.0f, 0.0f, 100.0f));
+		//a = new TargetActor(this);
+		//a->SetPosition(Vector3(1450.0f, 0.0f, 400.0f));
+		//a = new TargetActor(this);
+		//a->SetPosition(Vector3(1450.0f, -500.0f, 200.0f));
+		//a = new TargetActor(this);
+		//a->SetPosition(Vector3(1450.0f, 500.0f, 200.0f));
 	}
 
 	void Game::UnloadData()
