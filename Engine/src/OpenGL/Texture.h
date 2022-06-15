@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "SDL.h"
 
 namespace Engine
 {
@@ -12,6 +13,7 @@ namespace Engine
 
 		bool Load(const std::string& fileName);
 		void Unload();
+		void CreateFromSurface(SDL_Surface* surface);
 
 		void SetActive();
 		

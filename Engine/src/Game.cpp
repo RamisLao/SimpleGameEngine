@@ -1,5 +1,7 @@
 #include "Game.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "Actor.h"
 // https://www.libsdl.org/projects/SDL_image/
 #include "SDL_image.h"
@@ -22,6 +24,12 @@
 #include "CameraActor.h"
 #include "PhysWorld.h"
 #include "TargetActor.h"
+#include "SDL_ttf.h"
+#include "Font.h"
+#include <rapidjson\document.h>
+#include "UIScreen.h"
+#include "HUD.h"
+#include "PauseMenu.h"
 
 namespace Engine
 {
@@ -74,6 +82,13 @@ namespace Engine
 		SDL_GameControllerAddMappingsFromFile("src/Assets/gamecontrollerdb.txt");
 
 		m_PhysWorld = new PhysWorld(this);
+
+		// Initialize SDL_ttf
+		if (TTF_Init() != 0)
+		{
+			SDL_Log("Failed to initialize SDL_ttf");
+			return false;
+		}
 
 		LoadData();
 		Random::Init();
@@ -130,6 +145,87 @@ namespace Engine
 		}
 	}
 
+	void Game::PushUI(UIScreen* screen)
+	{
+		m_UIStack.emplace_back(screen);
+	}
+
+	Font* Game::GetFont(const std::string& fileName)
+	{
+		auto iter = m_Fonts.find(fileName);
+		if (iter != m_Fonts.end())
+		{
+			return iter->second;
+		}
+		else
+		{
+			Font* font = new Font(this);
+			if (font->Load(fileName))
+			{
+				m_Fonts.emplace(fileName, font);
+			}
+			else
+			{
+				font->Unload();
+				delete font;
+				font = nullptr;
+			}
+			return font;
+		}
+	}
+
+	void Game::LoadText(const std::string& fileName)
+	{
+		// Clear the existing map, if already loaded
+		m_Text.clear();
+		// Try to open the file
+		std::ifstream file(fileName);
+		if (!file.is_open())
+		{
+			SDL_Log("Text file %s not found", fileName.c_str());
+			return;
+		}
+		// Read the entire file to a string stream
+		std::stringstream fileStream;
+		fileStream << file.rdbuf();
+		std::string contents = fileStream.str();
+		// Open this file in rapidJSON
+		rapidjson::StringStream jsonStr(contents.c_str());
+		rapidjson::Document doc;
+		doc.ParseStream(jsonStr);
+		if (!doc.IsObject())
+		{
+			SDL_Log("Text file %s is not valid JSON", fileName.c_str());
+			return;
+		}
+		// Parse the text map
+		const rapidjson::Value& actions = doc["TextMap"];
+		for (rapidjson::Value::ConstMemberIterator itr = actions.MemberBegin();
+			itr != actions.MemberEnd(); ++itr)
+		{
+			if (itr->name.IsString() && itr->value.IsString())
+			{
+				m_Text.emplace(itr->name.GetString(),
+					itr->value.GetString());
+			}
+		}
+	}
+
+	const std::string& Game::GetText(const std::string& key)
+	{
+		static std::string errorMsg("**KEY NOT FOUND**");
+		// Find this text in the map, if it exists
+		auto iter = m_Text.find(key);
+		if (iter != m_Text.end())
+		{
+			return iter->second;
+		}
+		else
+		{
+			return errorMsg;
+		}
+	}
+
 	void Game::AddPlane(PlaneActor* plane)
 	{
 		m_Planes.emplace_back(plane);
@@ -155,13 +251,29 @@ namespace Engine
 				break;
 			// This fires when a key's initially pressed
 			case SDL_KEYDOWN:
-				if (!event.key.repeat)
+				if (m_GameState == EGameplay)
 				{
 					HandleKeyPress(event.key.keysym.sym);
+				}
+				else if (!m_UIStack.empty())
+				{
+					m_UIStack.back()->
+						HandleKeyPress(event.key.keysym.sym);
 				}
 				break;
 			case SDL_MOUSEWHEEL:
 				m_InputSystem->ProcessEvent(event);
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if (m_GameState == EGameplay)
+				{
+					HandleKeyPress(event.button.button);
+				}
+				else if (!m_UIStack.empty())
+				{
+					m_UIStack.back()->
+						HandleKeyPress(event.button.button);
+				}
 				break;
 			default:
 				break;
@@ -171,23 +283,33 @@ namespace Engine
 		m_InputSystem->Update();
 		const InputState& state = m_InputSystem->GetState();
 
-		if (state.Keyboard.GetKeyState(SDL_SCANCODE_ESCAPE) == EReleased)
+		if (m_GameState == EGameplay)
 		{
-			m_IsRunning = false;
+			m_UpdatingActors = true;
+			for (auto actor : m_Actors)
+			{
+				if (actor->GetState() == Actor::EActive)
+				{
+					actor->ProcessInput(state);
+				}
+			}
+			m_UpdatingActors = false;
 		}
-
-		m_UpdatingActors = true;
-		for (auto actor : m_Actors)
+		else if (!m_UIStack.empty())
 		{
-			actor->ProcessInput(state);
+			const Uint8* state = SDL_GetKeyboardState(NULL);
+			m_UIStack.back()->ProcessInput(state);
 		}
-		m_UpdatingActors = false;
 	}
 
 	void Game::HandleKeyPress(int key)
 	{
 		switch (key)
 		{
+		case SDLK_ESCAPE:
+			// Create pause menu
+			new PauseMenu(this);
+			break;
 		case '-':
 		{
 			// Reduce master volume
@@ -269,6 +391,29 @@ namespace Engine
 
 		// Update audio system
 		m_AudioSystem->Update(deltaTime);
+
+		// Update UI screens
+		for (auto ui : m_UIStack)
+		{
+			if (ui->GetState() == UIScreen::EActive)
+			{
+				ui->Update(deltaTime);
+			}
+		}
+		// Delete any UIScreens that are closed
+		auto iter = m_UIStack.begin();
+		while (iter != m_UIStack.end())
+		{
+			if ((*iter)->GetState() == UIScreen::EClosing)
+			{
+				delete* iter;
+				iter = m_UIStack.erase(iter);
+			}
+			else
+			{
+				++iter;
+			}
+		}
 	}
 
 	void Game::GenerateOutput()
@@ -278,6 +423,9 @@ namespace Engine
 
 	void Game::LoadData()
 	{
+		// Load English text
+		LoadText("src/Assets/UI/English.gptext");
+
 		// Create actors
 		Actor* a = new Actor(this);
 		a->SetPosition(Vector3(200.f, 75.f, 0.f));
@@ -288,11 +436,11 @@ namespace Engine
 		MeshComponent* mc = new MeshComponent(a);
 		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Cube.gpmesh"));
 
-		//a = new Actor(this);
-		//a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
-		//a->SetScale(3.0f);
-		//mc = new MeshComponent(a);
-		//mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
+		a = new Actor(this);
+		a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
+		a->SetScale(3.0f);
+		mc = new MeshComponent(a);
+		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
 
 		//// Setup floor
 		const float start = -1250.0f;
@@ -306,32 +454,32 @@ namespace Engine
 			}
 		}
 
-		////// Left/right walls
-		//q = Quaternion(Vector3::UnitX, CustomMath::PiOver2);
-		//for (int i = 0; i < 10; i++)
-		//{
-		//	a = new PlaneActor(this);
-		//	a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
-		//	a->SetRotation(q);
+		//// Left/right walls
+		q = Quaternion(Vector3::UnitX, CustomMath::PiOver2);
+		for (int i = 0; i < 10; i++)
+		{
+			a = new PlaneActor(this);
+			a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
+			a->SetRotation(q);
 
-		//	a = new PlaneActor(this);
-		//	a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
-		//	a->SetRotation(q);
-		//}
+			a = new PlaneActor(this);
+			a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
+			a->SetRotation(q);
+		}
 
-		//q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, CustomMath::PiOver2));
+		q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, CustomMath::PiOver2));
 
-		//////// Forward/back walls
-		//for (int i = 0; i < 10; i++)
-		//{
-		//	a = new PlaneActor(this);
-		//	a->SetPosition(Vector3(start - size, start + i * size, 0.0f));
-		//	a->SetRotation(q);
+		////// Forward/back walls
+		for (int i = 0; i < 10; i++)
+		{
+			a = new PlaneActor(this);
+			a->SetPosition(Vector3(start - size, start + i * size, 0.0f));
+			a->SetRotation(q);
 
-		//	a = new PlaneActor(this);
-		//	a->SetPosition(Vector3(-start + size, start + i * size, 0.0f));
-		//	a->SetRotation(q);
-		//}
+			a = new PlaneActor(this);
+			a->SetPosition(Vector3(-start + size, start + i * size, 0.0f));
+			a->SetRotation(q);
+		}
 
 		m_Renderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
 		DirectionalLight& dir = m_Renderer->GetDirectionalLight();
@@ -345,31 +493,28 @@ namespace Engine
 
 
 		// UI elements
-		//a = new Actor(this);
-		//a->SetScale(2.0f);
-		//m_Crosshair = new SpriteComponent(a);
-		//m_Crosshair->SetTexture(m_Renderer->GetTexture("src/Assets/3DGraphics/Crosshair.png"));
+		m_HUD = new HUD(this);
 
-		//// Create spheres with audio components playing different sounds
-		//a = new Actor(this);
-		//a->SetPosition(Vector3(500.0f, -75.0f, 0.0f));
-		//a->SetScale(1.0f);
-		//mc = new MeshComponent(a);
-		//mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
-		//AudioComponent* ac = new AudioComponent(a);
-		//ac->PlayEvent("event:/FireLoop");
+		// Create spheres with audio components playing different sounds
+		a = new Actor(this);
+		a->SetPosition(Vector3(500.0f, -75.0f, 0.0f));
+		a->SetScale(1.0f);
+		mc = new MeshComponent(a);
+		mc->SetMesh(m_Renderer->GetMesh("src/Assets/3DGraphics/Sphere.gpmesh"));
+		AudioComponent* ac = new AudioComponent(a);
+		ac->PlayEvent("event:/FireLoop");
 
-		//m_MusicEvent = m_AudioSystem->PlayEvent("event:/Music");
+		m_MusicEvent = m_AudioSystem->PlayEvent("event:/Music");
 
-		//// Create target actors
-		//a = new TargetActor(this);
-		//a->SetPosition(Vector3(1450.0f, 0.0f, 100.0f));
-		//a = new TargetActor(this);
-		//a->SetPosition(Vector3(1450.0f, 0.0f, 400.0f));
-		//a = new TargetActor(this);
-		//a->SetPosition(Vector3(1450.0f, -500.0f, 200.0f));
-		//a = new TargetActor(this);
-		//a->SetPosition(Vector3(1450.0f, 500.0f, 200.0f));
+		// Create target actors
+		a = new TargetActor(this);
+		a->SetPosition(Vector3(1450.0f, 0.0f, 100.0f));
+		a = new TargetActor(this);
+		a->SetPosition(Vector3(1450.0f, 0.0f, 400.0f));
+		a = new TargetActor(this);
+		a->SetPosition(Vector3(1450.0f, -500.0f, 200.0f));
+		a = new TargetActor(this);
+		a->SetPosition(Vector3(1450.0f, 500.0f, 200.0f));
 	}
 
 	void Game::UnloadData()
@@ -387,7 +532,7 @@ namespace Engine
 
 	void Game::RunLoop()
 	{
-		while (m_IsRunning)
+		while (m_GameState != EQuit)
 		{
 			ProcessInput();
 			UpdateGame();

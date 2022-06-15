@@ -8,6 +8,8 @@
 #include "SpriteComponent.h"
 #include "MeshComponent.h"
 #include <GL\glew.h>
+#include "Game.h"
+#include "UIScreen.h"
 
 namespace Engine
 {
@@ -147,6 +149,12 @@ namespace Engine
 		for (auto sprite : m_Sprites)
 		{
 			sprite->Draw(m_SpriteShader);
+		}
+
+		// Draw any UI screens
+		for (auto ui : m_Game->GetUIStack())
+		{
+			ui->Draw(m_SpriteShader);
 		}
 
 		SDL_GL_SwapWindow(m_Window);

@@ -2,7 +2,7 @@
 #include "Texture.h"
 // Simple OpenGL Image Library
 #include "SOIL\SOIL.h"
-#include "SDL.h"
+
 #include "GL\glew.h"
 
 namespace Engine
@@ -73,6 +73,22 @@ namespace Engine
 	void Texture::Unload()
 	{
 		glDeleteTextures(1, &m_TextureID);
+	}
+
+	void Texture::CreateFromSurface(SDL_Surface* surface)
+	{
+		m_Width = surface->w;
+		m_Height = surface->h;
+
+		// Generate a GL texture
+		glGenTextures(1, &m_TextureID);
+		glBindTexture(GL_TEXTURE_2D, m_TextureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_BGRA,
+			GL_UNSIGNED_BYTE, surface->pixels);
+
+		// Use linear filtering
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
 	void Texture::SetActive()

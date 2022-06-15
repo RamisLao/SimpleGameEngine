@@ -61,7 +61,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\OpenGL;src\Components;src\GameObjects;$(SolutionDir)$(ProjectName)\vendor\SDL\include;$(SolutionDir)$(ProjectName)\vendor\GLEW\include;$(SolutionDir)$(ProjectName)\vendor\soil\include;$(SolutionDir)$(ProjectName)\vendor\rapidjson\include;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\OpenGL;src\Components;src\GameObjects;$(SolutionDir)$(ProjectName)\vendor\SDL\include;$(SolutionDir)$(ProjectName)\vendor\GLEW\include;$(SolutionDir)$(ProjectName)\vendor\soil\include;$(SolutionDir)$(ProjectName)\vendor\rapidjson\include;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc;src\UI</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -69,7 +69,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)$(ProjectName)\vendor\SDL\lib\x64;$(SolutionDir)$(ProjectName)\vendor\GLEW\lib\Release\x64;$(SolutionDir)$(ProjectName)\vendor\soil\lib\x64;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\lib;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SOIL.lib;opengl32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;fmodstudio64_vc.lib;fmodstudioL64_vc.lib;fmod64_vc.lib;fmodL64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SOIL.lib;opengl32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;fmodstudio64_vc.lib;fmodstudioL64_vc.lib;fmod64_vc.lib;fmodL64_vc.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -108,6 +108,7 @@
     <ClCompile Include="src\Components\MeshComponent.cpp" />
     <ClCompile Include="src\Components\MoveComponent.cpp" />
     <ClCompile Include="src\Components\NavComponent.cpp" />
+    <ClCompile Include="src\Components\TargetComponent.cpp" />
     <ClCompile Include="src\CustomMath.cpp" />
     <ClCompile Include="src\GameObjects\Actor.cpp" />
     <ClCompile Include="src\Components\AnimSpriteComponent.cpp" />
@@ -133,6 +134,11 @@
     <ClCompile Include="src\PhysWorld.cpp" />
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\SoundEvent.cpp" />
+    <ClCompile Include="src\UI\DialogBox.cpp" />
+    <ClCompile Include="src\UI\Font.cpp" />
+    <ClCompile Include="src\UI\HUD.cpp" />
+    <ClCompile Include="src\UI\PauseMenu.cpp" />
+    <ClCompile Include="src\UI\UIScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AudioSystem.h" />
@@ -150,6 +156,7 @@
     <ClInclude Include="src\Components\MeshComponent.h" />
     <ClInclude Include="src\Components\MoveComponent.h" />
     <ClInclude Include="src\Components\NavComponent.h" />
+    <ClInclude Include="src\Components\TargetComponent.h" />
     <ClInclude Include="src\CustomMath.h" />
     <ClInclude Include="src\GameObjects\Actor.h" />
     <ClInclude Include="src\Components\AnimSpriteComponent.h" />
@@ -174,6 +181,11 @@
     <ClInclude Include="src\PhysWorld.h" />
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\SoundEvent.h" />
+    <ClInclude Include="src\UI\DialogBox.h" />
+    <ClInclude Include="src\UI\Font.h" />
+    <ClInclude Include="src\UI\HUD.h" />
+    <ClInclude Include="src\UI\PauseMenu.h" />
+    <ClInclude Include="src\UI\UIScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Assets\3DGraphics\Cube.png" />
